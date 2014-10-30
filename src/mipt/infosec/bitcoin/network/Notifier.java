@@ -22,4 +22,8 @@ public class Notifier {
 	public void sendNewNodeInfo() {
 		
 	}
+
+	public Properties getAddresses() {
+		return addresses;
+	}
 }
