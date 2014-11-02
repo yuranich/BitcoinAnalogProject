@@ -17,19 +17,19 @@ public class Notifier {
 	public void sendNewTransactionMessage() {
 		message.setType(Protocol.TYPES.NEW_TRANSACTION.toString());
 		message.setData("New transaction created!");
-		NetworkUtils.sendMessage (message.formMessage());
+		NetworkUtils.sendMessage (addresses.getProperty("first"), message.formMessage());
 	}
 	
 	public void sendSuccessfulTransactionMessage() {
 		message.setType(Protocol.TYPES.SUCCESSFUL_TRANSACTION.toString());
 		message.setData("Transaction successfully executed!");
-		NetworkUtils.sendMessage (message.formMessage());
+		NetworkUtils.sendMessage (addresses.getProperty("first"), message.formMessage());
 	}
 	
 	public void sendNewNodeInfo() {
 		message.setType(Protocol.TYPES.NEW_NODE.toString());
 		message.setData("New node created!");
-		NetworkUtils.sendMessage (message.formMessage());
+		NetworkUtils.sendMessage (addresses.getProperty("first"), message.formMessage());
 	}
 	
 

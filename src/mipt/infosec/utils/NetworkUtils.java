@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 
 public class NetworkUtils {
 
-	public static void sendMessage (Collection<String> message) {
+	public static void sendMessage (String address, Collection<String> message) {
 		try (Socket receiver = new Socket("address", Protocol.CONNECTION_PORT)) {
 			OutputStream out = receiver.getOutputStream();
 			IOUtils.writeLines(message, "\n", out);

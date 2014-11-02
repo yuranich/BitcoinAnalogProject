@@ -9,7 +9,7 @@ import org.apache.commons.io.IOUtils;
 
 public class Receiver {
 
-	public void Receive() {
+	public void receive() {
         try (ServerSocket welcomeSocket = new ServerSocket(Protocol.CONNECTION_PORT)) {
         	while(true)
         	{
