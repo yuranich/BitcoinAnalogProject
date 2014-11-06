@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transactions>
+  <transaction id="1">
+    <from>11</from>
+    <to>232</to>
+    <coin>321</coin>
+  </transaction>
+  <transaction id="2">
+    <from>11</from>
+    <to>232</to>
+    <coin>321</coin>
+    <hash>hash 1234</hash>
+  </transaction>
+</transactions>

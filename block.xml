@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blocks>
+  <block id="111"/>
+  <block id="113"/>
+  <block id="112">
+    <transaction>222</transaction>
+    <transaction>222</transaction>
+  </block>
+  <block id="115"/>
+  <block id="114">
+    <transaction>222</transaction>
+  </block>
+</blocks>
