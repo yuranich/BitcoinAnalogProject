@@ -14,7 +14,9 @@ public class Receiver {
         	while(true)
         	{
         		try {
+        			System.out.println("Before acception of socket connection");
         			Socket connectionSocket = welcomeSocket.accept();
+        			System.out.println("Socket connection accepted");
         			InputStreamReader inputFromParticipant = new InputStreamReader(connectionSocket.getInputStream());
         			MessageInstance message = new MessageInstance(IOUtils.readLines(inputFromParticipant));
         			updateDBInfo(message);
@@ -25,6 +27,15 @@ public class Receiver {
         } catch (IOException e1) {
 			e1.printStackTrace();
 		} 
+	}
+	
+	public void setStaticIP() throws IOException {
+		String str1="192.168.0.201";
+		String str2="255.255.255.0";
+		String[] command1 = { "netsh", "interface", "ip", "set", "address",
+		"name=", "Local Area Connection" ,"source=static", "addr=",str1,
+		"mask=", str2};
+		Runtime.getRuntime().exec(command1);
 	}
 	
 	public void updateDBInfo(MessageInstance message) {

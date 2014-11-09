@@ -8,6 +8,10 @@ public class MessageInstance {
 	private String type;
 	private String data;
 	
+	public MessageInstance () {
+		
+	}
+	
 	public MessageInstance (List<String> message) {
 		parseMessage(message);
 	}
