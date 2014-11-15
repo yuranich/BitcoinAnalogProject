@@ -1,7 +1,6 @@
 package mipt.infosec.bitcoin.test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Properties;
 
 import mipt.infosec.bitcoin.network.Notifier;
@@ -12,7 +11,7 @@ public class TestNetwork {
 	public static void main(String[] args) {
 		
 		if (args.length < 1) {
-			System.out.println("Usage: java <programm> <address of a second node");
+			System.out.println("Usage: java TestNetwork <address of a second node>");
 			return;
 		}
 		Thread server = new MyThread();
@@ -23,10 +22,10 @@ public class TestNetwork {
 		Notifier notifier = new Notifier(prop);
 		try {
 			notifier.sendNewNodeInfo();
-			notifier.sendNewTransactionMessage();
+			notifier.sendNewTransactionMessage();                   
 			notifier.sendSuccessfulTransactionMessage();
 			System.out.println("Messages are sended");
-		} catch (UnknownHostException e) {
+		} catch ( IOException e) {
 			e.printStackTrace();
 			System.out.println("Messages are not sended");
 		}

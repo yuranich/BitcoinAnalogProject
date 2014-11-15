@@ -7,7 +7,7 @@ import mipt.infosec.secutils.hash.Stribog;
 public class TestStribog {
 
 public static void main(String[] args) {
-		if (args.length < 1) {
+		if (args.length != 3) {
 			System.out.println("Usage: java <programm> need to input 2 example for hash calculating and hashLength");
 			return;
 		}
