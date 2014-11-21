@@ -112,6 +112,7 @@ public class Transaction {
 			Element node = document.createElement("transaction");
 			node.setAttribute("id", Integer.toString(maxId + 1));
 			root.appendChild(node);
+			root.setAttribute("maxid", Integer.toString(maxId+1));
 			Element sendFrom = document.createElement("from");
 			sendFrom.appendChild(document.createTextNode(Integer.toString(from)));
 			Element sendTO = document.createElement("to");
@@ -159,17 +160,12 @@ public class Transaction {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
-		int maxId = 0;
 		try {
-			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(file);
-			NodeList nl = document.getElementsByTagName("transaction");
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element node = (Element) nl.item(i);
-				if (maxId < Integer.parseInt(node.getAttribute("id")))
-					maxId = Integer.parseInt(node.getAttribute("id"));
-			}
-			return maxId;
+		builder = factory.newDocumentBuilder();
+		Document document = builder.parse(file);
+	    Element root = document.getDocumentElement();
+		
+			return Integer.parseInt(root.getAttribute("maxid"));
 
 		} catch (ParserConfigurationException e) {
 			System.out.println("Can parse file");

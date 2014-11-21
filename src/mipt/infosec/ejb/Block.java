@@ -48,8 +48,27 @@ public class Block {
 				Element root = document.getDocumentElement();
 				Element node = document.createElement("block");
 				node.setAttribute("id", Integer.toString(maxId + 1));
-				root.appendChild(node);
 				
+				byte[] id = BigInteger.valueOf(maxId+ 1).toByteArray();
+				Stribog stb = new Stribog(256);
+				byte[] hash = stb.getHash(id);
+				BigInteger bhash = new BigInteger(hash);
+
+				Element hashs = document.createElement("current_hash");
+				hashs.appendChild(document.createTextNode(bhash.toString()));
+				node.appendChild(hashs);
+				
+				byte[] lid = BigInteger.valueOf(maxId).toByteArray();
+				Stribog lstb = new Stribog(256);
+				byte[] lhash = lstb.getHash(lid);
+				BigInteger lbhash = new BigInteger(lhash);
+
+				Element lhashs = document.createElement("prev_hash");
+				lhashs.appendChild(document.createTextNode(lbhash.toString()));
+				
+				node.appendChild(lhashs);
+				root.appendChild(node);
+				root.setAttribute("maxid",Integer.toString(maxId+1));
 				
 				try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
 					out.print(XmlUtils.toXML(document));
@@ -94,7 +113,14 @@ public class Block {
 				
 				Element transac = document.createElement("transaction");
 				transac.appendChild(document.createTextNode(Integer.toString(transid)));
-				
+				byte[] id = BigInteger.valueOf(transid).toByteArray();
+				Stribog stb = new Stribog(256);
+				byte[] hash = stb.getHash(id);
+				BigInteger bhash = new BigInteger(hash);
+
+				Element hashs = document.createElement("hash");
+				hashs.appendChild(document.createTextNode(bhash.toString()));
+				transac.appendChild(hashs);
 				root.appendChild(node);
 				node.appendChild(transac);
 				
@@ -131,13 +157,8 @@ public class Block {
 		try {
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(file);
-			NodeList nl = document.getElementsByTagName("block");
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element node = (Element) nl.item(i);
-				if (maxId < Integer.parseInt(node.getAttribute("id")))
-					maxId = Integer.parseInt(node.getAttribute("id"));
-			}
-			return maxId;
+			Element root = document.getDocumentElement();
+			return Integer.parseInt(root.getAttribute("maxid"));
 
 		} catch (ParserConfigurationException e) {
 			System.out.println("Can parse file");

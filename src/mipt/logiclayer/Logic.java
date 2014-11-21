@@ -8,8 +8,8 @@ public class Logic {
 	public static void createTransaction(int from,int to,int money){
 		
 		Transaction tr = new Transaction();
-		maxId= tr.getMaxId();
 		tr.createTransaction(from, to, money);
+		
 		
 		/*
 		 * тут вызаваем класс который делает рассылку об изминение файла transaction.xml

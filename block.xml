@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blocks>
-  <block id="113"/>
-  <block id="112">
+<blocks maxid="11">
+  <block id="1"/>
+  <block id="2">
     <transaction>222</transaction>
-    <transaction>222</transaction>
-  </block>
-  <block id="115"/>
-  <block id="116"/>
-  <block id="117"/>
-  <block id="118"/>
-  <block id="114">
     <transaction>222</transaction>
     <transaction>222</transaction>
     <transaction>222</transaction>
     <transaction>222</transaction>
   </block>
-  <block id="119"/>
-  <block id="120"/>
-  <block id="121"/>
-  <block id="122"/>
-  <block id="123"/>
-  <block id="111">
-    <transaction>222</transaction>
-    <transaction>222</transaction>
-    <transaction>222</transaction>
-    <transaction>222</transaction>
-    <transaction>222</transaction>
+  <block id="4"/>
+  <block id="5"/>
+  <block id="6"/>
+  <block id="7"/>
+  <block id="8"/>
+  <block id="9">
+    <current_hash>-29540757696119270492493026155612455739260134825090793131685406055414051507107</current_hash>
+    <prev_hash>-40886869113471220526247691845953503438328909189691924727050205366544647861073</prev_hash>
+  </block>
+  <block id="10">
+    <current_hash>18291462720627312861350258526545143200228839968305402545769234333489107217350</current_hash>
+    <prev_hash>-29540757696119270492493026155612455739260134825090793131685406055414051507107</prev_hash>
+  </block>
+  <block id="3">
+    <transaction>123<hash>-23897027062009077205864045472348131045951290570214415834714836158229571118271</hash>
+    </transaction>
+    <transaction>3<hash>-26949552910727082485379195891788470586022523675752882724281878850923991459166</hash>
+    </transaction>
+    <transaction>3<hash>-26949552910727082485379195891788470586022523675752882724281878850923991459166</hash>
+    </transaction>
+    <transaction>3<hash>54646771361113023226554888658363955195474105886321804815892300522960780426411</hash>
+    </transaction>
+    <transaction>3<hash>54646771361113023226554888658363955195474105886321804815892300522960780426411</hash>
+    </transaction>
+    <transaction>3<hash>54646771361113023226554888658363955195474105886321804815892300522960780426411</hash>
+    </transaction>
+    <transaction>3<hash>54646771361113023226554888658363955195474105886321804815892300522960780426411</hash>
+    </transaction>
+  </block>
+  <block id="11">
+    <current_hash>-31038546834590578172805407157327551984010792696535271800300181809043731188041</current_hash>
+    <prev_hash>18291462720627312861350258526545143200228839968305402545769234333489107217350</prev_hash>
   </block>
 </blocks>
