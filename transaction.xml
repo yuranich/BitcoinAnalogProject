@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<transactions maxid="9">
+<transactions maxid="11">
   <transaction id="1">
     <from>11</from>
     <to>232</to>
@@ -52,5 +52,17 @@
     <to>22</to>
     <coin>124</coin>
     <hash>-29540757696119270492493026155612455739260134825090793131685406055414051507107</hash>
+  </transaction>
+  <transaction id="10">
+    <from>1</from>
+    <to>2</to>
+    <coin>10</coin>
+    <hash>10</hash>
+  </transaction>
+  <transaction id="11">
+    <from>1</from>
+    <to>2</to>
+    <coin>0</coin>
+    <hash>-31038546834590578172805407157327551984010792696535271800300181809043731188041</hash>
   </transaction>
 </transactions>

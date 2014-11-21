@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import mipt.infosec.ejb.Transaction;
+
 import org.apache.commons.io.IOUtils;
 
 public class Receiver {
@@ -39,6 +41,19 @@ public class Receiver {
 	}
 	
 	public void updateDBInfo(MessageInstance message) {
+		switch (message.getType()) {
+			case Protocol.NEW_NODE: //TODO: some actions.
+				break;
+			case Protocol.NEW_TRANSACTION: 
+				new Transaction().createTransaction(message.getFrom(), message.getTo(), message.getMoney());
+				break;
+			case Protocol.SUCCESSFUL_TRANSACTION:
+				new Transaction().updateTransaction(message.getFrom(), message.getTo(), 
+						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+				break;
+			default: throw new RuntimeException("Undefined type of message!!!");
+		}
+		
 		message.dumpContent();
 	}
 }

@@ -3,6 +3,7 @@ package mipt.infosec.bitcoin.network;
 import java.io.IOException;
 import java.util.Properties;
 
+import mipt.infosec.ejb.Transaction;
 import mipt.infosec.utils.NetworkUtils;
 
 public class Notifier {
@@ -19,21 +20,27 @@ public class Notifier {
 		return addresses;
 	}
 	
-	public void sendNewTransactionMessage() throws IOException {
+	public void sendNewTransactionMessage(Transaction transaction) throws IOException {
 		message.setType(Protocol.NEW_TRANSACTION);
-		message.setData("New transaction created!");
+		message.setFrom(transaction.getFrom());
+		message.setTo(transaction.getTo());
+		message.setTransactionId(transaction.getId());
+		message.setTransactionHash(transaction.getHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
-	public void sendSuccessfulTransactionMessage() throws IOException {
+	public void sendSuccessfulTransactionMessage(Transaction transaction) throws IOException {
 		message.setType(Protocol.SUCCESSFUL_TRANSACTION);
-		message.setData("Transaction successfully executed!");
+		message.setFrom(transaction.getFrom());
+		message.setTo(transaction.getTo());
+		message.setMoney(transaction.getMoney());
+		message.setTransactionId(transaction.getId());
+		message.setTransactionHash(transaction.getHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
 	public void sendNewNodeInfo() throws IOException {
 		message.setType(Protocol.NEW_NODE);
-		message.setData("New node created!");
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 }

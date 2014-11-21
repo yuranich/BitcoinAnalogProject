@@ -1,9 +1,9 @@
 package mipt.infosec.bitcoin.network;
 
 public class Protocol {
-	public static final int CONNECTION_PORT = 60000;
+	public static final int CONNECTION_PORT = 60001;
 
-	public static final String NEW_TRANSACTION = "New transaction";
-	public static final String SUCCESSFUL_TRANSACTION = "Successful transaction";
-	public static final String NEW_NODE = "New node";
+	public static final int NEW_NODE = 1;
+	public static final int NEW_TRANSACTION = 2;
+	public static final int SUCCESSFUL_TRANSACTION = 3;
 }
