@@ -23,6 +23,97 @@ import org.xml.sax.SAXException;
 public class Block {
 	public static final String filename = "block.xml";
 	public static final String defaultfile = "<blocks>\n</blocks>";
+	private int id;
+	private String hash;
+	private String prevHash;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public String getPrevHash() {
+		return prevHash;
+	}
+
+	public void setPrevHash(String prevHash) {
+		this.prevHash = prevHash;
+	}
+
+	public void createReceivedBlock(int blockId, String blockHash, String prevHash) {
+		File f = new File(filename);
+		
+		if (!f.exists() || f.length() == 0){
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				out.print(defaultfile);
+			
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+			
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(f);
+
+			Element root = document.getDocumentElement();
+			Element node = document.createElement("block");
+			node.setAttribute("id", Integer.toString(blockId));
+			
+			BigInteger bhash = new BigInteger(blockHash);
+
+			Element hashs = document.createElement("current_hash");
+			hashs.appendChild(document.createTextNode(bhash.toString()));
+			node.appendChild(hashs);
+			
+			this.hash = bhash.toString();
+			
+			BigInteger lbhash = new BigInteger(prevHash);
+
+			Element lhashs = document.createElement("prev_hash");
+			lhashs.appendChild(document.createTextNode(lbhash.toString()));
+			node.appendChild(lhashs);
+			root.appendChild(node);
+			
+			this.prevHash = lhashs.toString();
+			
+			root.setAttribute("maxid",Integer.toString(id));
+			
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}		
+	}
 	
 	public void createBlock() {
 		File f = new File(filename);
@@ -53,11 +144,13 @@ public class Block {
 				Stribog stb = new Stribog(256);
 				byte[] hash = stb.getHash(id);
 				BigInteger bhash = new BigInteger(hash);
-
+				
 				Element hashs = document.createElement("current_hash");
 				hashs.appendChild(document.createTextNode(bhash.toString()));
 				node.appendChild(hashs);
 				
+				this.hash = bhash.toString();
+
 				byte[] lid = BigInteger.valueOf(maxId).toByteArray();
 				Stribog lstb = new Stribog(256);
 				byte[] lhash = lstb.getHash(lid);
@@ -65,9 +158,11 @@ public class Block {
 
 				Element lhashs = document.createElement("prev_hash");
 				lhashs.appendChild(document.createTextNode(lbhash.toString()));
-				
 				node.appendChild(lhashs);
 				root.appendChild(node);
+				
+				this.prevHash = lhashs.toString();
+				
 				root.setAttribute("maxid",Integer.toString(maxId+1));
 				
 				try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
@@ -172,7 +267,5 @@ public class Block {
 		}
 		return 0;
 	}
-
-
 }
 

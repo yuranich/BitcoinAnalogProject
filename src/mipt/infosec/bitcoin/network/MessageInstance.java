@@ -12,6 +12,8 @@ public class MessageInstance {
 	private int transactionId;
 	private String transactionHash;
 	private int blockId;
+	private String blockHash;
+	private String prevBlockHash;
 	
 	public MessageInstance () {
 		
@@ -78,6 +80,22 @@ public class MessageInstance {
 		this.blockId = blockId;
 	}
 
+	public String getBlockHash() {
+		return blockHash;
+	}
+
+	public void setBlockHash(String blockHash) {
+		this.blockHash = blockHash;
+	}
+
+	public String getPrevBlockHash() {
+		return prevBlockHash;
+	}
+
+	public void setPrevBlockHash(String prevBlockHash) {
+		this.prevBlockHash = prevBlockHash;
+	}
+
 	public void parseMessage(List<String> message) {
 		type = Integer.parseInt(message.get(0));
 		switch (type) {
@@ -97,6 +115,8 @@ public class MessageInstance {
 				transactionId   = Integer.parseInt(message.get(4));
 				transactionHash = message.get(5);
 				blockId = Integer.parseInt(message.get(6));
+				blockHash = message.get(7);
+				prevBlockHash = message.get(8);
 				break;			
 			default: throw new RuntimeException("Unknown message type!");
 		}
@@ -122,6 +142,8 @@ public class MessageInstance {
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
 				newMessage.add(Integer.toString(blockId));
+				newMessage.add(blockHash);
+				newMessage.add(prevBlockHash);
 				break;
 			default: throw new RuntimeException("Unknown transaction type!");
 		}

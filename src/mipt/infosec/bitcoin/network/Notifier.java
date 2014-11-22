@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
 import mipt.infosec.utils.NetworkUtils;
 
@@ -33,14 +34,16 @@ public class Notifier {
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
-	public void sendSuccessfulTransactionMessage(Transaction transaction) throws IOException {
+	public void sendBlockCreatedMessage(Block block, Transaction transaction) throws IOException {
 		message.setType(Protocol.SUCCESSFUL_TRANSACTION);
 		message.setFrom(transaction.getFrom());
 		message.setTo(transaction.getTo());
 		message.setMoney(transaction.getMoney());
 		message.setTransactionId(transaction.getId());
 		message.setTransactionHash(transaction.getHash());
-		message.setBlockId(1);
+		message.setBlockId(block.getId());
+		message.setBlockHash(block.getHash());
+		message.setPrevBlockHash(block.getPrevHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	

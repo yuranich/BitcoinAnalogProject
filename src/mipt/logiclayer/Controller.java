@@ -15,7 +15,6 @@ import mipt.infosec.secutils.hash.Stribog;
 public class Controller {
 
 	//These parameters should be globally known
-	private static Properties addresses = new Properties();
 	private static final byte[] maxBlockHashAvailable = {
 		(byte)0x7F, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF,
 		(byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF,
@@ -62,13 +61,15 @@ public class Controller {
 			if ((stribog.getHash(serialize(block))[0] & 0x80) != 0) {
 				break;
 			}
-			block = new Block();
+			block.createBlock();
 		}
 		block.addTransaction(Block.getMaxId(), 0);
 		block.addTransaction(Block.getMaxId(), transaction.getId());
 		
-		//Notifier notifier = new Notifier(addresses);
-		//notifier.sendNewBlockMessage(transaction);
+		Notifier notifier = new Notifier();
+		
+		notifier.sendBlockCreatedMessage(block, transaction);
+		
 		return Boolean.TRUE;
 	}
 	

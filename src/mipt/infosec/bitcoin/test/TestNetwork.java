@@ -23,7 +23,6 @@ public class TestNetwork {
 			tr.createTransaction(1, 2, 10);
 			notifier.sendNewNodeInfo();
 			notifier.sendNewTransactionMessage(tr.getTransaction(Transaction.getMaxId()));                   
-			notifier.sendSuccessfulTransactionMessage(tr.getTransaction(Transaction.getMaxId()));
 			System.out.println("Messages are sended");
 		} catch ( IOException e) {
 			e.printStackTrace();
