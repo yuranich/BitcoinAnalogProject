@@ -18,9 +18,9 @@ public class Stribog {
 		this.hashLength = hashLength;
 	}
 	
-	 private byte[] initial =new byte[64];
+	 private byte[] initial = new byte[64];
 
-     private byte[] N =new byte[64];
+     private byte[] N = new byte[64];
 
      private byte[] Sigma = new byte[64];
 
