@@ -1,7 +1,6 @@
 package mipt.infosec.bitcoin.test;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import mipt.infosec.bitcoin.network.Notifier;
 import mipt.infosec.bitcoin.network.Receiver;
@@ -18,10 +17,8 @@ public class TestNetwork {
 		Thread server = new MyThread();
 		server.start();
 		
-		Properties prop = new Properties();
-		prop.put("first", args[0]);
-		Notifier notifier = new Notifier(prop);
 		try {
+			Notifier notifier = new Notifier();
 			Transaction tr = new Transaction();
 			tr.createTransaction(1, 2, 10);
 			notifier.sendNewNodeInfo();
@@ -40,11 +37,6 @@ class MyThread extends Thread {
 	@Override
 	public void run () {
 		Receiver receiver = new Receiver();
-		try {
-			receiver.setStaticIP();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		receiver.receive();
 	}
 }

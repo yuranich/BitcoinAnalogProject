@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Properties;
 
 import mipt.infosec.bitcoin.network.Protocol;
+import mipt.infosec.bitcoin.network.Receiver;
 
 import org.apache.commons.io.IOUtils;
 
@@ -18,7 +19,10 @@ public class NetworkUtils {
 		}
 	}
 	
-	public static void sendNotification (String address, Collection<String> message) throws IOException {
+	public static void sendNotification(String address, Collection<String> message) throws IOException {
+		if (Receiver.MY_ADDR.equals(address)) {
+			return;
+		}
 		try (Socket receiver = new Socket(address, Protocol.CONNECTION_PORT)) {
 			OutputStream out = receiver.getOutputStream();
 			IOUtils.writeLines(message, "\n", out);

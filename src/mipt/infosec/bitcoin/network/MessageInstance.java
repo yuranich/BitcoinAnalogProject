@@ -94,8 +94,9 @@ public class MessageInstance {
 				from  = Integer.parseInt(message.get(1));
 				to    = Integer.parseInt(message.get(2));
 				money = Integer.parseInt(message.get(3));
-				transactionId   = Integer.parseInt(message.get(3));
-				transactionHash = message.get(4);
+				transactionId   = Integer.parseInt(message.get(4));
+				transactionHash = message.get(5);
+				blockId = Integer.parseInt(message.get(6));
 				break;			
 			default: throw new RuntimeException("Unknown message type!");
 		}
@@ -120,6 +121,7 @@ public class MessageInstance {
 				newMessage.add(Integer.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
+				newMessage.add(Integer.toString(blockId));
 				break;
 			default: throw new RuntimeException("Unknown transaction type!");
 		}
@@ -132,6 +134,7 @@ public class MessageInstance {
 					   + "\n               to: " + to
 					   + "\n               money: " + money
 					   + "\n               transaction id: " + transactionId
-					   + "\n               transaction hash: " + transactionHash);
+					   + "\n               transaction hash: " + transactionHash
+					   + "\n               block id: " + blockId);
 	}
 }

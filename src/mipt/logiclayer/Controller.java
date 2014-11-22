@@ -48,7 +48,7 @@ public class Controller {
 		Transaction transaction = new Transaction();
 		transaction.createTransaction(from, to, money);
 		
-		Notifier notifier = new Notifier(addresses);
+		Notifier notifier = new Notifier();
 		notifier.sendNewTransactionMessage(transaction);
 		
 		return Boolean.TRUE;

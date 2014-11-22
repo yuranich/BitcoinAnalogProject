@@ -1,6 +1,8 @@
 package mipt.infosec.bitcoin.network;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import mipt.infosec.ejb.Transaction;
@@ -12,8 +14,10 @@ public class Notifier {
 
 	private final MessageInstance message = new MessageInstance();
 	
-	public Notifier(Properties addresses) {
-		this.addresses = addresses;
+	public Notifier() throws IOException {
+		InputStream stream = new FileInputStream("addresses.properties");
+		this.addresses = new Properties();
+		addresses.load(stream);
 	}
 
 	public Properties getAddresses() {
@@ -36,6 +40,7 @@ public class Notifier {
 		message.setMoney(transaction.getMoney());
 		message.setTransactionId(transaction.getId());
 		message.setTransactionHash(transaction.getHash());
+		message.setBlockId(1);
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	

@@ -10,6 +10,8 @@ import mipt.infosec.ejb.Transaction;
 import org.apache.commons.io.IOUtils;
 
 public class Receiver {
+	
+	public static final String MY_ADDR = "192.168.0.101";
 
 	public void receive() {
         try (ServerSocket welcomeSocket = new ServerSocket(Protocol.CONNECTION_PORT)) {
@@ -31,15 +33,6 @@ public class Receiver {
 		} 
 	}
 	
-	public void setStaticIP() throws IOException {
-		String str1="192.168.0.201";
-		String str2="255.255.255.0";
-		String[] command1 = { "netsh", "interface", "ip", "set", "address",
-		"name=", "Local Area Connection" ,"source=static", "addr=",str1,
-		"mask=", str2};
-		Runtime.getRuntime().exec(command1);
-	}
-	
 	public void updateDBInfo(MessageInstance message) {
 		switch (message.getType()) {
 			case Protocol.NEW_NODE: //TODO: some actions.
@@ -50,6 +43,7 @@ public class Receiver {
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				new Transaction().updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+				//TODO: update block;
 				break;
 			default: throw new RuntimeException("Undefined type of message!!!");
 		}
