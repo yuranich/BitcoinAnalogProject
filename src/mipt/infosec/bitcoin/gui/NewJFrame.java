@@ -1,20 +1,27 @@
 package mipt.infosec.bitcoin.gui;
 
 
-import java.awt.Button;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.Integer;
+
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import mipt.infosec.bitcoin.network.Receiver;
+import mipt.infosec.bitcoin.wallet.Wallet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,10 +35,10 @@ import javax.swing.JPanel;
  */
 public class NewJFrame extends javax.swing.JFrame {
 
-    Toolkit kit = Toolkit.getDefaultToolkit();
-    Dimension screenSize = kit.getScreenSize();
-    int screenWidth = (int)(screenSize.width / 1.5);
-    int screenHeight = (int)(screenSize.height / 1.5);
+    public static Toolkit kit = Toolkit.getDefaultToolkit();
+    public static Dimension screenSize = kit.getScreenSize();
+    public static int screenWidth = (int)(screenSize.width);
+    public static int screenHeight = (int)(screenSize.height);
     private BufferedImage iconimage;
     public NewJFrame() {
         initComponents();
@@ -41,11 +48,11 @@ public class NewJFrame extends javax.swing.JFrame {
             Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         setIconImage(iconimage);
-        setTitle("MiptBitcoin");
+        setTitle("MiptСoin");
         setBackground(Color.WHITE);
         
-        setSize(screenWidth, screenHeight);
-        setLocation(screenWidth / 4, screenHeight / 4);
+        setSize((int)(screenWidth / 1.5), (int)(screenHeight / 1.5));
+        setLocation((int)(screenWidth / 1.5) / 4, (int)(screenHeight / 1.5) / 4);
         HelloPanel panel = new HelloPanel();
         panel.setBackground(Color.WHITE);
         
@@ -53,10 +60,6 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     class HelloPanel extends JPanel {
 
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
         private BufferedImage image;
         
         public void paintComponent(Graphics g) {
@@ -74,6 +77,8 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -98,6 +103,14 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setText("У вас на счету: ");
+
+        jLabel2.setForeground(new java.awt.Color(255, 0, 0));
+///////////////        
+        Wallet wal = new Wallet();
+        Integer x = wal.getSumm();
+        jLabel2.setText(x.toString());
+////////////////
         jMenu1.setText(" Файл");
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon_success_sml.gif"))); // NOI18N
@@ -128,7 +141,14 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenu1.add(jSeparator1);
 
         jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-email-icon.png"))); // NOI18N
-        jMenuItem5.setText("Адреса отправки...");
+//////////////////////////////////
+        jMenuItem5.setText("Отправить сообщение...");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+//////////////////////////////////        
         jMenu1.add(jMenuItem5);
 
         jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-email-icon.png"))); // NOI18N
@@ -193,11 +213,21 @@ public class NewJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(0, 268, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addContainerGap(209, Short.MAX_VALUE))
         );
 
         pack();
@@ -212,9 +242,28 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    	int result = JOptionPane.showConfirmDialog(
+    			null,
+    			"Вы уверены, что хотите выйти?",
+    			"Выход",
+    			JOptionPane.YES_NO_OPTION);
+    			if (result == 0)
+    			System.exit(0);
+    			else 
+    				System.out.println(screenWidth + "       " + screenHeight);
 
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+//////////////////////////////////////////////////////////
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    	SendFrame frame = new SendFrame();
+        frame.setDefaultCloseOperation(WIDTH);
+        frame.setVisible(true);
+        frame.setTitle("Отравить сообщение");
+        frame.setLocation(screenWidth / 4, screenHeight / 4);
+    }
+    
+//////////////////////////////////////////////////////////  
+  
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         SimpleFrame frame = new SimpleFrame();
         frame.setDefaultCloseOperation(WIDTH);
@@ -223,10 +272,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
     class SimpleFrame extends JFrame {
        
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
         private BufferedImage iconimage;
         
         public SimpleFrame() {
@@ -252,10 +297,6 @@ public class NewJFrame extends javax.swing.JFrame {
     
     class HiPanel extends JPanel {
 
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
         private BufferedImage image;
         
         public void paintComponent(Graphics g) {
@@ -266,7 +307,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             super.paintComponent(g);
-            g.drawString("Mipt Infosec Bitcoin", screenWidth / 7, screenHeight / 20);
+            g.drawString("MiptСoin", screenWidth / 7, screenHeight / 20);
             g.drawString("Версия 1.0", screenWidth / 7, screenHeight / 15);
             g.drawString("Авторы:", screenWidth / 7, screenHeight / 7);
             g.drawString("Камалова Ирина, Мингазов Денис, Патушин Александр,", screenWidth / 7, screenHeight / 5);
@@ -279,9 +320,7 @@ public class NewJFrame extends javax.swing.JFrame {
         }
         
     }
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -305,7 +344,15 @@ public class NewJFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        Thread server = new Thread() {
+        	@Override
+        	public void run () {
+        		Receiver receiver = new Receiver();
+        		receiver.receive();
+        	}
 
+        };
+		server.start();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -315,6 +362,8 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
