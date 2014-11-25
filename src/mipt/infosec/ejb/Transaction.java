@@ -218,6 +218,46 @@ public class Transaction {
 		return null;
 
 	}
+	
+	public void deleteTransaction(int id){
+		File file = new File(filename);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			NodeList nl = document.getElementsByTagName("transaction");
+			Element trans = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == id) {
+					trans = node;
+				}
+			}
+			Element root = document.getDocumentElement();
+			root.removeChild((Node)trans);
+			
+			try (PrintStream out = new PrintStream(new FileOutputStream(
+					filename))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}catch (ParserConfigurationException e) {
+				System.out.println("Can parse file");
+				e.printStackTrace();
+		} catch (SAXException e) {
+				e.printStackTrace();
+		} catch (IOException e) {
+				e.printStackTrace();
+		}
+		
+		
+	}
 
 	public int getFrom() {
 		return from;

@@ -115,6 +115,70 @@ public class Block {
 		}		
 	}
 	
+	public void updateblock(int blockId, int transacId){
+		Transaction tr = new Transaction();
+		Transaction cur = tr.getTransaction(transacId);
+		tr.deleteTransaction(transacId);
+		File f = new File(filename);
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(f);
+			NodeList nl = document.getElementsByTagName("block");
+			Element block = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == blockId) {
+					block = node;
+				}
+			}
+			Element transac = document.createElement("transaction");
+			transac.appendChild(document.createTextNode(Integer.toString(transacId)));
+			Element sendFrom = document.createElement("from");
+			sendFrom.appendChild(document.createTextNode(Integer.toString(cur.getFrom())));
+			Element sendTO = document.createElement("to");
+			sendTO.appendChild(document.createTextNode(Integer.toString(cur.getTo())));
+			Element coin = document.createElement("coin");
+			coin.appendChild(document.createTextNode(Integer.toString(cur.getMoney())));
+			Element hashs = document.createElement("hash");
+			hashs.appendChild(document.createTextNode(cur.getHash()));
+			
+			transac.appendChild(sendFrom);
+			transac.appendChild(sendTO);
+			transac.appendChild(coin);
+			transac.appendChild(hashs);
+			
+			block.appendChild(transac);
+			
+			
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
+			
+		}catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		
+		
+	}
+	
 	public void createBlock() {
 		File f = new File(filename);
 		

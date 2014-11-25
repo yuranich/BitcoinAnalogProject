@@ -11,12 +11,6 @@
     <coin>321</coin>
     <hash>hash 1234</hash>
   </transaction>
-  <transaction id="3">
-    <from>1111</from>
-    <to>22</to>
-    <coin>124</coin>
-    <hash>54646771361113023226554888658363955195474105886321804815892300522960780426411</hash>
-  </transaction>
   <transaction id="4">
     <from>11121</from>
     <to>11</to>
@@ -136,17 +130,5 @@
     <to>2</to>
     <coin>0</coin>
     <hash>51250016427806672091988113579472113615620265205492274240212738702204588378667</hash>
-  </transaction>
-  <transaction id="24">
-    <from>1</from>
-    <to>2</to>
-    <coin>10</coin>
-    <hash>-28061630627924282951910486206962967150979073713737830655111136670362011565150</hash>
-  </transaction>
-  <transaction id="25">
-    <from>1</from>
-    <to>2</to>
-    <coin>0</coin>
-    <hash>35272901775588565537022124751531114253031907667481562726700402085397250459575</hash>
   </transaction>
 </transactions>
