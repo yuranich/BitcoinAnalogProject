@@ -22,7 +22,7 @@ public class HashSimpleFunctions {
         byte[] result = new byte[64];
         
         for (int i = 0; i < 64; i++) {
-        	result[i] = HashData.S_VALUES[state[i] & 0x3f]; //erase first two bits to save bounds.
+        	result[i] = HashData.S_VALUES[((int)state[i] & 0xff)];
         }
         return result;
     }
