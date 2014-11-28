@@ -8,12 +8,15 @@ public class Main {
 		
 		Transaction tr = new Transaction();
 		System.out.println( tr.getMaxId());
+		tr.getEmissionTransaction();
+		tr.createTransaction(0, 0,1024);
+	//		for(int i = 0; i < tr.getTrascationToProve().size();i++) System.out.println(tr.getTrascationToProve().get(i).getId());
 //		tr.deleteTransaction(24);
 		//		tr.updateTransaction(11121, 11, 545,4,"ssds");
 	//	tr.createTransaction(11, 22,124);
 //		System.out.println(Block.getMaxId());
 		Block b = new Block();
-		b.updateblock(11,3);
+//		b.updateblock(11,3);
 //		System.out.println(b.getMaxId());
 		
 //		b.createBlock();

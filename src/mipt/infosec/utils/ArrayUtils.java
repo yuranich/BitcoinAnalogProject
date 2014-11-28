@@ -37,6 +37,15 @@ public class ArrayUtils {
 	    return bits;
 	}
 	
+	public static void reverseBitsInBitSet(BitSet bits) {
+		for (int i = 0; i < bits.size() / 2; i++) {
+			boolean temp1 = bits.get(i);
+			boolean temp2 = bits.get(bits.size()-i-1);
+			bits.set(i, temp2);
+			bits.set(bits.size()-i-1, temp1);
+		}
+	}
+	
 	public static byte[] getBytesFromLong(long x) {
 	    ByteBuffer buffer = ByteBuffer.allocate(BYTES_IN_LONG);
 	    buffer.putLong(x);

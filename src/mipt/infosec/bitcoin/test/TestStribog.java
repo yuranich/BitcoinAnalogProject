@@ -80,11 +80,11 @@ public static void main(String[] args) {
 			byte[] testHash2 = stribog.getHash(testInput2);
 			
 			System.out.println("Messages are hashed. The result is:\n" + 
-							   example1 + " \n " + Arrays.toString(hash1) + " \n" +
-							   example2 + " \n " + Arrays.toString(hash2) + " \n" +
-							   testInput1 + " = " + Arrays.toString(testHash1) + " \n" +
+							   example1 + " = " + Arrays.toString(hash1) + " \n" +
+							   example2 + " = " + Arrays.toString(hash2) + " \n\n" +
+							   "testResult1 = " + Arrays.toString(testHash1) + " \n" +
 							   "should be  = " + Arrays.toString(testOutput1) + "\n\n" +
-							   testInput2 + " = " + Arrays.toString(testHash2) + " \n " +
+							   "testResult2 = " + Arrays.toString(testHash2) + " \n " +
 							   "should be  = " + Arrays.toString(testOutput2));
 		} catch (Exception e) {
 			e.printStackTrace();

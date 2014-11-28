@@ -22,7 +22,7 @@ public class HashSimpleFunctions {
         byte[] result = new byte[64];
         
         for (int i = 0; i < 64; i++) {
-        	result[i] = HashData.S_VALUES[((int)state[i] & 0xff)];
+        	result[i] = HashData.S_VALUES[((int)state[i] & 0xff)]; //TODO: check.
         }
         return result;
     }
@@ -47,6 +47,8 @@ public class HashSimpleFunctions {
             ArrayUtils.copyBytesToBytes(state, i * 8, tempArray, 0, 8);
             Collections.reverse(Arrays.asList(tempArray));
             BitSet bitSet = ArrayUtils.getBitSetFromBytes(tempArray);
+            ArrayUtils.reverseBitsInBitSet(bitSet);
+            
             for (int j = 0; j < 64; j++) {
                 if (bitSet.get(j) != false)
                     t = t ^ HashData.L_VALUES[j];
@@ -88,7 +90,7 @@ public class HashSimpleFunctions {
         ArrayUtils.copyBytesToBytes(a, 0, tempA, 64 - a.length, a.length);
         ArrayUtils.copyBytesToBytes(b, 0, tempB, 64 - b.length, b.length);
         for (i = 63; i >= 0; i--) {
-            t = tempA[i] + tempB[i] + (t >> 8);
+            t = tempA[i] + tempB[i] + (t >> 8); //what if >>> ? TODO: check
             result[i] = (byte)(t & 0xFF);
         }
         
