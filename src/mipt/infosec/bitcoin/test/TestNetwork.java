@@ -11,10 +11,6 @@ public class TestNetwork {
 
 	public static void main(String[] args) {
 		
-		if (args.length < 1) {
-			System.out.println("Usage: java TestNetwork <address of a second node>");
-			return;
-		}
 		Thread server = new MyThread();
 		server.start();
 		
