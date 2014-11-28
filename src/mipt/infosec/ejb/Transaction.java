@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,7 +52,7 @@ public class Transaction {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
 				if (Integer.parseInt(node.getAttribute("id")) == max) {
-					System.out.println("sdsd");
+					
 					trans = node;
 				}
 			}
@@ -193,7 +195,6 @@ public class Transaction {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
 				if (Integer.parseInt(node.getAttribute("id")) == id) {
-					System.out.println("sdsd");
 					trans = node;
 				}
 			}
@@ -255,6 +256,80 @@ public class Transaction {
 		} catch (IOException e) {
 				e.printStackTrace();
 		}
+		
+		
+	}
+	
+	public Transaction getEmissionTransaction(){
+		Transaction tr = new Transaction();
+		File file = new File(filename);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			NodeList nl = document.getElementsByTagName("transaction");
+			Element trans = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == id) {
+					trans = node;
+				}
+			}
+			Element t = document.getDocumentElement();
+			int coin = Integer.parseInt(t.getElementsByTagName("coin").item(0).getTextContent());
+			coin = coin / 2;
+			t.getElementsByTagName("coin").item(0).setTextContent(Integer.toString(coin));
+			
+			try (PrintStream out = new PrintStream(new FileOutputStream(
+					filename))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}catch (ParserConfigurationException e) {
+			System.out.println("Can parse file");
+			e.printStackTrace();
+	} catch (SAXException e) {
+			e.printStackTrace();
+	} catch (IOException e) {
+			e.printStackTrace();
+	}
+		
+		
+		
+		return tr.getTransaction(0);
+	}
+	
+	public List<Transaction> getTrascationToProve(){
+		File file = new File(filename);
+		List<Transaction> l = new ArrayList<Transaction>();
+		Transaction tr = new Transaction();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			NodeList nl = document.getElementsByTagName("transaction");
+			Element trans = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) != 0) l.add(tr.getTransaction(Integer.parseInt(node.getAttribute("id")))); 
+			}
+			return l;
+		}catch (ParserConfigurationException e) {
+			System.out.println("Can parse file");
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 		
 		
 	}

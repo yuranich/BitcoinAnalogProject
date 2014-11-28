@@ -51,6 +51,45 @@ public class Block {
 		this.prevHash = prevHash;
 	}
 
+	public Block getBlock(int id){
+		File f = new File(filename);
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(f);
+			NodeList nl = document.getElementsByTagName("block");
+			Element block = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == id) {
+					block = node;
+				}
+			Block bl = new Block();
+			bl.setId(id);
+			bl.setHash(block.getElementsByTagName("current_hash").item(0).getTextContent());
+			bl.setPrevHash(block.getElementsByTagName("prev_hash").item(0).getTextContent());
+			return bl;
+			}
+		}catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+			
+	}
+	
+	
+	
 	public void createReceivedBlock(int blockId, String blockHash, String prevHash) {
 		File f = new File(filename);
 		
