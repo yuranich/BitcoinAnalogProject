@@ -15,14 +15,13 @@ public class NetworkUtils {
 
 	public static void sendNotificationToAll(Properties addresses, Collection<String> message) throws IOException {
 		for (Object value : addresses.values()) {
-			sendNotification((String)value, message);
+			if (!Receiver.MY_ADDR.equals((String)value)) {				
+				sendNotification((String)value, message);
+			}
 		}
 	}
 	
 	public static void sendNotification(String address, Collection<String> message) throws IOException {
-		if (Receiver.MY_ADDR.equals(address)) {
-			return;
-		}
 		try (Socket receiver = new Socket(address, Protocol.CONNECTION_PORT)) {
 			OutputStream out = receiver.getOutputStream();
 			IOUtils.writeLines(message, "\n", out);

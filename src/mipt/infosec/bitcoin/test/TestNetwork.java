@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import mipt.infosec.bitcoin.network.Notifier;
 import mipt.infosec.bitcoin.network.Receiver;
+import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
 
 public class TestNetwork {
@@ -21,8 +22,11 @@ public class TestNetwork {
 			Notifier notifier = new Notifier();
 			Transaction tr = new Transaction();
 			tr.createTransaction(1, 2, 10);
+			Block block = new Block();
+			block.createBlock();
 			notifier.sendNewNodeInfo();
 			notifier.sendNewTransactionMessage(tr.getTransaction(Transaction.getMaxId()));                   
+			//notifier.sendBlockCreatedMessage(block.getBlock(Block.getMaxId()), tr.getTransaction(Transaction.getMaxId()));
 			System.out.println("Messages are sended");
 		} catch ( IOException e) {
 			e.printStackTrace();
