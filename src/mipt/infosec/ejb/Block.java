@@ -60,17 +60,20 @@ public class Block {
 			Document document = builder.parse(f);
 			NodeList nl = document.getElementsByTagName("block");
 			Element block = null;
+			System.out.println(nl.getLength());
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
+				System.out.println(Integer.parseInt(node.getAttribute("id")));
 				if (Integer.parseInt(node.getAttribute("id")) == id) {
 					block = node;
 				}
+			}
 			Block bl = new Block();
 			bl.setId(id);
 			bl.setHash(block.getElementsByTagName("current_hash").item(0).getTextContent());
 			bl.setPrevHash(block.getElementsByTagName("prev_hash").item(0).getTextContent());
 			return bl;
-			}
+			
 		}catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
