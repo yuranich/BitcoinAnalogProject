@@ -57,34 +57,38 @@ public class Controller {
 	public static Boolean createBlock(Transaction transaction) throws Exception {
 		Stribog stribog = new Stribog(512);
 		Block block = new Block();
-		for(int i = 0; i > 0; i++) {
+		int i = 0;
+		while(true) {
 			if ((stribog.getHash(serialize(block))[0] & 0x80) != 0) {
+				break;
+			}
+			i++;
+			if (i > 1000000) {
+				System.out.println("You not gonna make it!!!");
 				break;
 			}
 			block.createBlock();
 		}
-		block.addTransaction(Block.getMaxId(), 0);
-		block.addTransaction(Block.getMaxId(), transaction.getId());
+		block.updateblock(Block.getMaxId(), transaction.getId());
 		
 		Notifier notifier = new Notifier();
-		
 		notifier.sendBlockCreatedMessage(block, transaction);
 		
 		return Boolean.TRUE;
 	}
 	
-	//This method is used when new information about transaction in the network was got
-	public static void updateTransaction(Transaction transaction) {
-		Transaction trans = new Transaction();
-		trans.updateTransaction(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
-	}
+//	//This method is used when new information about transaction in the network was got
+//	public static void updateTransaction(Transaction transaction) {
+//		Transaction trans = new Transaction();
+//		trans.updateTransaction(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
+//	}
 	
-	//This method is used when new information about block in the network was got
-	public static void updateBlock(Block block) {
-		Block blocks = new Block();
-		//TODO: need new class Block
-		//blocks.updateBlock(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
-	}
+//	//This method is used when new information about block in the network was got
+//	public static void updateBlock(Block block) {
+//		Block blocks = new Block();
+//		//TODO: need new class Block
+//		//blocks.updateBlock(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
+//	}
 	
 	public static byte[] serialize(Object object) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

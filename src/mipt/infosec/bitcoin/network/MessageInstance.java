@@ -157,6 +157,8 @@ public class MessageInstance {
 					   + "\n               money: " + money
 					   + "\n               transaction id: " + transactionId
 					   + "\n               transaction hash: " + transactionHash
-					   + "\n               block id: " + blockId);
+					   + "\n               block id: " + blockId
+					   + "\n               block hash: " + blockHash
+					   + "\n               prev block hash: " + prevBlockHash);
 	}
 }
