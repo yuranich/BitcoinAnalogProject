@@ -160,7 +160,7 @@ public class Block {
 	public void updateblock(int blockId, int transacId){
 		Transaction tr = new Transaction();
 		Transaction cur = tr.getTransaction(transacId);
-		tr.deleteTransaction(transacId);
+		if ( transacId != 0) tr.deleteTransaction(transacId);
 		File f = new File(filename);
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -274,7 +274,7 @@ public class Transaction {
 			Element trans = null;
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
-				if (Integer.parseInt(node.getAttribute("id")) == id) {
+				if (Integer.parseInt(node.getAttribute("id")) == 0) {
 					trans = node;
 				}
 			}
