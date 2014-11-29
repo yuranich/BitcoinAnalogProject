@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.math.BigInteger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,7 +21,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Block {
+public class Block implements Serializable {
 	public static final String filename = "block.xml";
 	public static final String defaultfile = "<blocks>\n</blocks>";
 	private int id;
@@ -116,22 +117,18 @@ public class Block {
 			Element node = document.createElement("block");
 			node.setAttribute("id", Integer.toString(blockId));
 			
-			BigInteger bhash = new BigInteger(blockHash);
-
 			Element hashs = document.createElement("current_hash");
-			hashs.appendChild(document.createTextNode(bhash.toString()));
+			hashs.appendChild(document.createTextNode(blockHash.toString()));
 			node.appendChild(hashs);
 			
-			this.hash = bhash.toString();
+			this.hash = blockHash;
 			
-			BigInteger lbhash = new BigInteger(prevHash);
-
 			Element lhashs = document.createElement("prev_hash");
-			lhashs.appendChild(document.createTextNode(lbhash.toString()));
+			lhashs.appendChild(document.createTextNode(prevHash));
 			node.appendChild(lhashs);
 			root.appendChild(node);
 			
-			this.prevHash = lhashs.toString();
+			this.prevHash = prevHash;
 			
 			root.setAttribute("maxid",Integer.toString(id));
 			
