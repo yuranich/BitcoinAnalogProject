@@ -11,7 +11,6 @@ public class Wallet {
 	private int summ;
 	private DataInputStream file; 
 	
-	
 	public Wallet() {
 		try {
 			this.file =  new DataInputStream(new FileInputStream("Wallet.txt"));

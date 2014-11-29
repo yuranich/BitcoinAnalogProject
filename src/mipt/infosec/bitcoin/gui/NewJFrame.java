@@ -111,10 +111,10 @@ public class NewJFrame extends javax.swing.JFrame {
         Integer x = wal.getSumm();
         jLabel2.setText(x.toString());
 ////////////////
-        jMenu1.setText(" Файл");
+        jMenu1.setText("Файл");
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon_success_sml.gif"))); // NOI18N
-        jMenuItem1.setText("Открыть URL...");
+        jMenuItem1.setText("Создать блок");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -234,7 +234,11 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
+    	BlockCreateFrame frame = new BlockCreateFrame();
+        frame.setDefaultCloseOperation(WIDTH);
+        frame.setVisible(true);
+        frame.setTitle("Создать блок");
+        frame.setLocation(screenWidth / 4, screenHeight / 4);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -311,10 +315,7 @@ public class NewJFrame extends javax.swing.JFrame {
             g.drawString("Версия 1.0", screenWidth / 7, screenHeight / 15);
             g.drawString("Авторы:", screenWidth / 7, screenHeight / 7);
             g.drawString("Камалова Ирина, Мингазов Денис, Патушин Александр,", screenWidth / 7, screenHeight / 5);
-            //g.drawString("Мингазов Денис", screenWidth / 7, screenHeight / 4);
-            //g.drawString("Патушин Александр", screenWidth / 7, screenHeight / 4);
             g.drawString("Самарин Юрий, Смирнов Николай", screenWidth / 7, screenHeight / 4);
-            //g.drawString("Смирнов Николай", screenWidth / 7, screenHeight / 3);
             g.drawImage(image, screenWidth / 40, screenHeight / 32, this);
             
         }
@@ -352,7 +353,7 @@ public class NewJFrame extends javax.swing.JFrame {
         	}
 
         };
-		//server.start();
+//!server.start();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
