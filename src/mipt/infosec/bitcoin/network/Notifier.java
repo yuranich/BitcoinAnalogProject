@@ -34,7 +34,7 @@ public class Notifier {
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
-	public void sendBlockCreatedMessage(Block block, Transaction transaction) throws IOException {
+	public void sendBlockCreatedMessage(Block block, Transaction transaction, Transaction trans) throws IOException {
 		message.setType(Protocol.SUCCESSFUL_TRANSACTION);
 		message.setFrom(transaction.getFrom());
 		message.setTo(transaction.getTo());
@@ -44,6 +44,9 @@ public class Notifier {
 		message.setBlockId(block.getId());
 		message.setBlockHash(block.getHash());
 		message.setPrevBlockHash(block.getPrevHash());
+		message.setEmissionTransId(trans.getId());
+		message.setEmissionTo(trans.getTo());
+		message.setEmissionFrom(trans.getFrom());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	

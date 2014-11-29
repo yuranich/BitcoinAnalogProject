@@ -70,11 +70,14 @@ public class Controller {
 			}
 			block.createBlock();
 		}
-		
-		block.updateblock(Block.getMaxId(), transaction.getId());
-		
 		Notifier notifier = new Notifier();
-		notifier.sendBlockCreatedMessage(block, transaction);
+		
+		Transaction trans = Transaction.getEmissionTransaction();
+		trans.setFrom("");
+		trans.setTo(Receiver.MY_ADDR);
+		block.updateblock(Block.getMaxId(), transaction.getId());
+		block.updateblock(Block.getMaxId(), trans.getId());
+		notifier.sendBlockCreatedMessage(block, transaction, trans);
 		
 		return Boolean.TRUE;
 	}

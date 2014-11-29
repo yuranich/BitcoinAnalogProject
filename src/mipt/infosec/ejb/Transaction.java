@@ -28,8 +28,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import sun.io.ByteToCharConverter;
-
 public class Transaction {
 	public static final String filename = "transaction.xml";
 	public static final String defaultfile = "<transactions>\n</transactions>";
@@ -261,7 +259,7 @@ public class Transaction {
 		
 	}
 	
-	public Transaction getEmissionTransaction(){
+	public static Transaction getEmissionTransaction(){
 		Transaction tr = new Transaction();
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -72,6 +72,7 @@ public class Receiver {
 				Block recv = new Block();
 				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());
 				recv.updateblock(message.getBlockId(), message.getTransactionId());
+				recv.updateblock(message.getBlockId(), message.getEmissionTransId());
 				break;
 			default: throw new RuntimeException("Undefined type of message!!!");
 		}

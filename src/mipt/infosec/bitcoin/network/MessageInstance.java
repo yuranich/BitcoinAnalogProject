@@ -14,7 +14,34 @@ public class MessageInstance {
 	private int blockId;
 	private String blockHash;
 	private String prevBlockHash;
+	private int emissionTransId;
+	private String emissionTo;
+	private String emissionFrom;
 	
+	public String getEmissionFrom() {
+		return emissionFrom;
+	}
+
+	public void setEmissionFrom(String emissionFrom) {
+		this.emissionFrom = emissionFrom;
+	}
+
+	public int getEmissionTransId() {
+		return emissionTransId;
+	}
+
+	public void setEmissionTransId(int emissionTransId) {
+		this.emissionTransId = emissionTransId;
+	}
+
+	public String getEmissionTo() {
+		return emissionTo;
+	}
+
+	public void setEmissionTo(String emissionTo) {
+		this.emissionTo = emissionTo;
+	}
+
 	public MessageInstance () {
 		
 	}
