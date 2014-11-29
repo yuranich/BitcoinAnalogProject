@@ -8,6 +8,7 @@ import java.util.Properties;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.OutputUtil;
 
 import mipt.infosec.bitcoin.network.Notifier;
+import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
 import mipt.infosec.secutils.hash.Stribog;
@@ -43,7 +44,7 @@ public class Controller {
 	}*/
 	
 	//This method is used for creating and sending broadcast about new transaction created
-	public static Boolean createTransaction(int from, int to, int money) throws IOException {
+	public static Boolean createTransaction(String from, String to, int money) throws IOException {
 		Transaction transaction = new Transaction();
 		transaction.createTransaction(from, to, money);
 		
@@ -69,6 +70,7 @@ public class Controller {
 			}
 			block.createBlock();
 		}
+		
 		block.updateblock(Block.getMaxId(), transaction.getId());
 		
 		Notifier notifier = new Notifier();

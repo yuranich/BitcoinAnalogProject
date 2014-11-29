@@ -33,13 +33,14 @@ import sun.io.ByteToCharConverter;
 public class Transaction {
 	public static final String filename = "transaction.xml";
 	public static final String defaultfile = "<transactions>\n</transactions>";
-	private int from = 0;
-	private int to = 0;
+	private String from = "";
+	private String to = "";
 	private int money = 0;
 	private String hash = "";
+	private String signature = "";
 	private int id = 0;
 
-	public void updateTransaction(int from, int to, int money, int max, String hash) {
+	public void updateTransaction(String from, String to, int money, int max, String hash) {
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -56,8 +57,8 @@ public class Transaction {
 					trans = node;
 				}
 			}
-			trans.getElementsByTagName("from").item(0).setTextContent(Integer.toString(from));
-			trans.getElementsByTagName("to").item(0).setTextContent(Integer.toString(to));
+			trans.getElementsByTagName("from").item(0).setTextContent(from);
+			trans.getElementsByTagName("to").item(0).setTextContent(to);
 			trans.getElementsByTagName("coin").item(0).setTextContent(Integer.toString(money));
 			trans.getElementsByTagName("hash").item(0).setTextContent(hash);
 			try (PrintStream out = new PrintStream(new FileOutputStream(
@@ -87,7 +88,7 @@ public class Transaction {
 
 	}
 
-	public void createTransaction(int from, int to, int money) {
+	public void createTransaction(String from, String to, int money) {
 		File f = new File(filename);
 
 		if (!f.exists() || f.length() == 0) {
@@ -116,9 +117,9 @@ public class Transaction {
 			root.appendChild(node);
 			root.setAttribute("maxid", Integer.toString(maxId+1));
 			Element sendFrom = document.createElement("from");
-			sendFrom.appendChild(document.createTextNode(Integer.toString(from)));
+			sendFrom.appendChild(document.createTextNode(from));
 			Element sendTO = document.createElement("to");
-			sendTO.appendChild(document.createTextNode(Integer.toString(to)));
+			sendTO.appendChild(document.createTextNode(to));
 			Element coin = document.createElement("coin");
 			coin.appendChild(document.createTextNode(Integer.toString(money)));
 			byte[] id = BigInteger.valueOf(maxId + 1).toByteArray();
@@ -200,8 +201,8 @@ public class Transaction {
 			}
 			Transaction tr = new Transaction();
 			tr.setId(id);
-			tr.setFrom(Integer.parseInt(trans.getElementsByTagName("from").item(0).getTextContent()));
-			tr.setTo(Integer.parseInt(trans.getElementsByTagName("to").item(0).getTextContent()));
+			tr.setFrom(trans.getElementsByTagName("from").item(0).getTextContent());
+			tr.setTo(trans.getElementsByTagName("to").item(0).getTextContent());
 			tr.setMoney(Integer.parseInt(trans.getElementsByTagName("coin").item(0).getTextContent()));
 			tr.setHash(trans.getElementsByTagName("hash").item(0).getTextContent());
 			return tr;
@@ -334,19 +335,19 @@ public class Transaction {
 		
 	}
 
-	public int getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setFrom(int from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public int getTo() {
+	public String getTo() {
 		return to;
 	}
 
-	public void setTo(int to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 

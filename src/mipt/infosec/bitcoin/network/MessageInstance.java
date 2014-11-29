@@ -6,8 +6,8 @@ import java.util.List;
 public class MessageInstance {
 	
 	private int type;
-	private int from;
-	private int to;
+	private String from;
+	private String to;
 	private int money;
 	private int transactionId;
 	private String transactionHash;
@@ -32,19 +32,19 @@ public class MessageInstance {
 		this.type = type;
 	}
 
-	public int getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setFrom(int from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public int getTo() {
+	public String getTo() {
 		return to;
 	}
 
-	public void setTo(int to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 
@@ -103,14 +103,14 @@ public class MessageInstance {
 				//TODO: some actions
 				break;
 			case Protocol.NEW_TRANSACTION:
-				from = Integer.parseInt(message.get(1));
-				to   = Integer.parseInt(message.get(2));
+				from = message.get(1);
+				to   = message.get(2);
 				transactionId   = Integer.parseInt(message.get(3));
 				transactionHash = message.get(4);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
-				from  = Integer.parseInt(message.get(1));
-				to    = Integer.parseInt(message.get(2));
+				from  = message.get(1);
+				to    = message.get(2);
 				money = Integer.parseInt(message.get(3));
 				transactionId   = Integer.parseInt(message.get(4));
 				transactionHash = message.get(5);
@@ -130,14 +130,14 @@ public class MessageInstance {
 				//TODO: write some actions
 				break;
 			case Protocol.NEW_TRANSACTION:
-				newMessage.add(Integer.toString(from));
-				newMessage.add(Integer.toString(to));
+				newMessage.add(from);
+				newMessage.add(to);
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
-				newMessage.add(Integer.toString(from));
-				newMessage.add(Integer.toString(to));
+				newMessage.add(from);
+				newMessage.add(to);
 				newMessage.add(Integer.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);

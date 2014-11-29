@@ -67,11 +67,11 @@ public class Receiver {
 				new Transaction().createTransaction(message.getFrom(), message.getTo(), message.getMoney());
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
-//				new Transaction().updateTransaction(message.getFrom(), message.getTo(), 
-//						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
-//				Block recv = new Block();
-//				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());
-//				recv.updateblock(message.getBlockId(), message.getTransactionId());
+				new Transaction().updateTransaction(message.getFrom(), message.getTo(), 
+						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+				Block recv = new Block();
+				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());
+				recv.updateblock(message.getBlockId(), message.getTransactionId());
 				break;
 			default: throw new RuntimeException("Undefined type of message!!!");
 		}

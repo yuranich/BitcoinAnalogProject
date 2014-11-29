@@ -17,7 +17,7 @@ public class TestNetwork {
 		try {
 			Notifier notifier = new Notifier();
 			Transaction tr = new Transaction();
-			tr.createTransaction(1, 2, 10);
+			tr.createTransaction("1.1.1.1", "2.2.2.2", 10);
 			Block block = new Block();
 			block.createBlock();
 			notifier.sendNewNodeInfo();

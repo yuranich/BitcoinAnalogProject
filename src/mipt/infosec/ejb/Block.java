@@ -178,9 +178,9 @@ public class Block {
 			Element transac = document.createElement("transaction");
 			transac.appendChild(document.createTextNode(Integer.toString(transacId)));
 			Element sendFrom = document.createElement("from");
-			sendFrom.appendChild(document.createTextNode(Integer.toString(cur.getFrom())));
+			sendFrom.appendChild(document.createTextNode(cur.getFrom()));
 			Element sendTO = document.createElement("to");
-			sendTO.appendChild(document.createTextNode(Integer.toString(cur.getTo())));
+			sendTO.appendChild(document.createTextNode(cur.getTo()));
 			Element coin = document.createElement("coin");
 			coin.appendChild(document.createTextNode(Integer.toString(cur.getMoney())));
 			Element hashs = document.createElement("hash");
