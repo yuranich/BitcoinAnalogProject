@@ -22,7 +22,7 @@ public class HashSimpleFunctions {
         byte[] result = new byte[64];
         
         for (int i = 0; i < 64; i++) {
-        	result[i] = HashData.S_VALUES[((int)state[i] & 0xff)]; //TODO: check.
+        	result[i] = HashData.S_VALUES[((int)state[i] & 0xff)];
         }
         return result;
     }
@@ -37,7 +37,6 @@ public class HashSimpleFunctions {
         return result;
     }
 
-	//TODO: Check this!!!
 	public static byte[] lFunction(byte[] state) {
         byte[] result = new byte[64];            
         
@@ -66,7 +65,7 @@ public class HashSimpleFunctions {
         for (int i = 0; i < 12; i++) {
             state = sFunction(state);
             state = pFunction(state);
-            state = lFunction(state);                
+            state = lFunction(state);
             key = keySchedule(key, i);
             state = xFunction(state, key);
         }
@@ -81,8 +80,8 @@ public class HashSimpleFunctions {
         return key;
     }
 	
-	public static byte[] addMod512(byte[] a, byte[] b) {
-        byte[] result = new byte[64];
+	public static byte[] addMod512(byte[] a, byte[] b) {   
+		byte[] result = new byte[64];
         
         int i = 0, t = 0;
         byte[] tempA = new byte[64];
@@ -90,8 +89,8 @@ public class HashSimpleFunctions {
         ArrayUtils.copyBytesToBytes(a, 0, tempA, 64 - a.length, a.length);
         ArrayUtils.copyBytesToBytes(b, 0, tempB, 64 - b.length, b.length);
         for (i = 63; i >= 0; i--) {
-            t = tempA[i] + tempB[i] + (t >> 8); //what if >>> ? TODO: check
-            result[i] = (byte)(t & 0xFF);
+            t = ((int)tempA[i] & 0xff) + ((int)tempB[i] & 0xff) + (t >> 8);
+            result[i] = (byte)(t & 0xFF);     
         }
         
         return result;
@@ -99,11 +98,17 @@ public class HashSimpleFunctions {
 
 	public static byte[] compression(byte[] N, byte[] h, byte[] m) {
         byte[] key = xFunction(h, N);
+    //System.out.println("key after X = " + ArrayUtils.byteArrayToHex(key));
         key = sFunction(key);
+    //System.out.println("key after S = " + ArrayUtils.byteArrayToHex(key));
         key = pFunction(key);
+    //System.out.println("key after P = " + ArrayUtils.byteArrayToHex(key));
         key = lFunction(key);
+    //System.out.println("key after L = " + ArrayUtils.byteArrayToHex(key));
         byte[] t = eFunction(key, m);
+    //System.out.println("t after E = " + ArrayUtils.byteArrayToHex(t));
         t = xFunction(t, h);
+    //System.out.println("t after X = " + ArrayUtils.byteArrayToHex(t));
         return xFunction(t, m);
     }
 

@@ -77,15 +77,18 @@ public class Stribog {
          
          byte[] N_512 = ArrayUtils.getBytesFromInt(512);
          Collections.reverse(Arrays.asList(N_512));
-         
          int i = 0;
          while (lengthOfMessageInBits >= 512) {
              i++;
              byte[] tempMessage = new byte[64];
-             ArrayUtils.copyBytesToBytes(message, message.length - i*64, tempMessage, 0, 64);                
+             ArrayUtils.copyBytesToBytes(message, message.length - i*64, tempMessage, 0, 64);
+     //System.out.println("tempMessage = " + ArrayUtils.byteArrayToHex(tempMessage));
              h = HashSimpleFunctions.compression(N, h, tempMessage);
+     //System.out.println("After compression h = " + ArrayUtils.byteArrayToHex(h));
              N = HashSimpleFunctions.addMod512(N, N_512);
+     //System.out.println("After compression N = " + ArrayUtils.byteArrayToHex(N));
              Sigma = HashSimpleFunctions.addMod512(Sigma, tempMessage);
+     //System.out.println("After compression Sigma = " + ArrayUtils.byteArrayToHex(Sigma) + "\n\n");
              lengthOfMessageInBits -= 512;                
          }
          
@@ -98,7 +101,7 @@ public class Stribog {
              paddedMes[64 - message1.length - 1] = 0x01;
              ArrayUtils.copyBytesToBytes(message1, 0, paddedMes, 64 - message1.length, message1.length);
          }            
-         
+    
          h=HashSimpleFunctions.compression(N, h, paddedMes);
          byte[] messageLength = ArrayUtils.getBytesFromInt(message1.length * 8);
          Collections.reverse(Arrays.asList(messageLength));
