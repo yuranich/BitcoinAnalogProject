@@ -49,7 +49,7 @@ public class Controller {
 		transaction.createTransaction(from, to, money);
 		
 		Notifier notifier = new Notifier();
-		notifier.sendNewTransactionMessage(transaction);
+		notifier.sendNewTransactionMessage(transaction.getTransaction(transaction.getMaxId()));
 		
 		return Boolean.TRUE;
 	}
