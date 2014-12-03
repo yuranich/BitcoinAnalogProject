@@ -43,11 +43,10 @@ public class Controller {
 	
 	//This method is used for creating and sending broadcast about new transaction created
 	public static Boolean createTransaction(String from, String to, int money) throws IOException {
-		Transaction transaction = new Transaction();
-		transaction.createTransaction(from, to, money);
+		Transaction.createTransaction(from, to, money);
 		
 		Notifier notifier = new Notifier();
-		notifier.sendNewTransactionMessage(transaction.getTransaction(Transaction.getMaxId()));
+		notifier.sendNewTransactionMessage(Transaction.getTransaction(Transaction.getMaxId()));
 		
 		return Boolean.TRUE;
 	}
@@ -71,11 +70,13 @@ public class Controller {
 		Notifier notifier = new Notifier();
 		
 		Transaction trans = Transaction.getEmissionTransaction();
-		trans.setFrom("");
-		trans.setTo(Receiver.MY_ADDR);
+		if (trans == null) {
+			Transaction.createReceivedTransaction(0, "", Receiver.MY_ADDR, 10, "no hash");
+			trans = Transaction.getTransaction(0);
+		}
 		block.updateblock(Block.getMaxId(), transaction.getId());
 		block.updateblock(Block.getMaxId(), trans.getId());
-		notifier.sendBlockCreatedMessage(block, transaction, trans);
+		notifier.sendBlockCreatedMessage(block.getBlock(Block.getMaxId()), transaction, trans);
 		
 		return Boolean.TRUE;
 	}

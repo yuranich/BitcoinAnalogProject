@@ -69,8 +69,13 @@ public class Receiver {
 				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
 				
-				Transaction.updateTransaction(message.getEmissionFrom(), message.getEmissionTo(), 
-						message.getEmissMoney(), message.getEmissionTransId(), message.getEmissionHash());
+				if (Transaction.getEmissionTransaction() == null) {
+					Transaction.createReceivedTransaction(message.getEmissionTransId(), message.getEmissionFrom(), 
+							message.getEmissionTo(), message.getEmissMoney(), message.getEmissionHash());
+				} else {					
+					Transaction.updateTransaction(message.getEmissionFrom(), message.getEmissionTo(), 
+							message.getEmissMoney(), message.getEmissionTransId(), message.getEmissionHash());
+				}
 				
 				Block recv = new Block();
 				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());

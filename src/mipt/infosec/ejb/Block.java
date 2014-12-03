@@ -69,6 +69,9 @@ public class Block implements Serializable {
 					block = node;
 				}
 			}
+			if (block == null) {
+				return null;
+			}
 			Block bl = new Block();
 			bl.setId(id);
 			bl.setHash(block.getElementsByTagName("current_hash").item(0).getTextContent());
@@ -121,14 +124,10 @@ public class Block implements Serializable {
 			hashs.appendChild(document.createTextNode(blockHash.toString()));
 			node.appendChild(hashs);
 			
-			this.hash = blockHash;
-			
 			Element lhashs = document.createElement("prev_hash");
 			lhashs.appendChild(document.createTextNode(prevHash));
 			node.appendChild(lhashs);
 			root.appendChild(node);
-			
-			this.prevHash = prevHash;
 			
 			root.setAttribute("maxid",Integer.toString(id));
 			
@@ -171,6 +170,10 @@ public class Block implements Serializable {
 				if (Integer.parseInt(node.getAttribute("id")) == blockId) {
 					block = node;
 				}
+			}
+			if (block == null) {
+				System.out.println("block doesn't found!");
+				return;
 			}
 			Element transac = document.createElement("transaction");
 			transac.appendChild(document.createTextNode(Integer.toString(transacId)));

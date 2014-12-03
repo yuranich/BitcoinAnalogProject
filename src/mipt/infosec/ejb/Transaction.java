@@ -329,7 +329,6 @@ public class Transaction {
 	}
 	
 	public static Transaction getEmissionTransaction(){
-		Transaction tr = new Transaction();
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -344,6 +343,9 @@ public class Transaction {
 				if (Integer.parseInt(node.getAttribute("id")) == 0) {
 					trans = node;
 				}
+			}
+			if (trans == null) {
+				return null;
 			}
 			double coin = Double.parseDouble(trans.getElementsByTagName("coin").item(0).getTextContent());
 			coin = coin / 2.0;
@@ -364,13 +366,12 @@ public class Transaction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return tr.getTransaction(0);
+		return Transaction.getTransaction(0);
 	}
 	
 	public List<Transaction> getTrascationToProve(){
 		File file = new File(filename);
 		List<Transaction> l = new ArrayList<Transaction>();
-		Transaction tr = new Transaction();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -378,14 +379,13 @@ public class Transaction {
 			builder = factory.newDocumentBuilder();
 			Document document = builder.parse(file);
 			NodeList nl = document.getElementsByTagName("transaction");
-			Element trans = null;
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
-				if (Integer.parseInt(node.getAttribute("id")) != 0) l.add(tr.getTransaction(Integer.parseInt(node.getAttribute("id")))); 
+				if (Integer.parseInt(node.getAttribute("id")) != 0) l.add(Transaction.getTransaction(Integer.parseInt(node.getAttribute("id")))); 
 			}
 			return l;
 		}catch (ParserConfigurationException e) {
-			System.out.println("Can parse file");
+			System.out.println("Can't parse file");
 			e.printStackTrace();
 		} catch (SAXException e) {
 			e.printStackTrace();
@@ -393,8 +393,6 @@ public class Transaction {
 			e.printStackTrace();
 		}
 		return null;
-		
-		
 	}
 
 	public String getFrom() {

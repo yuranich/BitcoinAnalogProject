@@ -47,6 +47,7 @@ public class Notifier {
 		message.setPrevBlockHash(block.getPrevHash());
 		message.setEmissionTransId(trans.getId());
 		message.setEmissionTo(trans.getTo());
+		message.setEmissMoney(trans.getMoney());
 		message.setEmissionFrom(trans.getFrom());
 		message.setEmissionHash(trans.getHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());

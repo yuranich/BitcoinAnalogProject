@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<transactions maxid="1">
-  <transaction id="1">
-    <from>192.168.0.101</from>
-    <to>192.168.0.109</to>
-    <coin>10</coin>
-    <hash>-41200177422071765738540548260213315151595948157278884974054722487905049356864</hash>
+<transactions maxid="0">
+  <transaction id="0">
+    <from/>
+    <to>169.254.144.250</to>
+    <coin>10.0</coin>
+    <hash>no hash</hash>
   </transaction>
 </transactions>
