@@ -3,5 +3,15 @@
   <block id="0">
     <current_hash>32224186172978362442303556451998570995326096651282982809152376511262501280157</current_hash>
     <prev_hash>[prev_hash: null]</prev_hash>
+    <transaction>2<from>169.254.144.250</from>
+      <to>169.254.244.101</to>
+      <coin>8.0</coin>
+      <hash>32224186172978362442303556451998570995326096651282982809152376511262501280157</hash>
+    </transaction>
+    <transaction>0<from/>
+      <to>169.254.144.250</to>
+      <coin>5.0</coin>
+      <hash>no hash</hash>
+    </transaction>
   </block>
 </blocks>

@@ -29,8 +29,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Transaction {
-	public static final String filename = "transaction.xml";
-	public static final String defaultfile = "<transactions>\n</transactions>";
+	public static final String FILE_NAME = "transaction.xml";
+	public static final String DEFAULT_FILE = "<transactions>\n</transactions>";
+	public static final double EMISSION_DIVISOR = 1.1;
 	private String from = "";
 	private String to = "";
 	private double money = 0;
@@ -39,7 +40,7 @@ public class Transaction {
 	private int id = 0;
 
 	public static void updateTransaction(String from, String to, double money, int id, String hash) {
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -59,7 +60,7 @@ public class Transaction {
 			trans.getElementsByTagName("to").item(0).setTextContent(to);
 			trans.getElementsByTagName("coin").item(0).setTextContent(Double.toString(money));
 			trans.getElementsByTagName("hash").item(0).setTextContent(hash);
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -84,11 +85,11 @@ public class Transaction {
 	}
 
 	public static void createTransaction(String from, String to, double money) {
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 
 		if (!f.exists() || f.length() == 0) {
 			try (PrintStream out = new PrintStream(new FileOutputStream(
-					filename))) {
+					FILE_NAME))) {
 				out.print("<transactions>" + '\n' + "</transactions>");
 
 			} catch (FileNotFoundException e1) {
@@ -129,7 +130,7 @@ public class Transaction {
 			node.appendChild(coin);
 			node.appendChild(hashs);
 
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -160,10 +161,10 @@ public class Transaction {
 			}
 			not_max = true;
 		}
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 
 		if (!f.exists() || f.length() == 0) {
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print("<transactions>" + '\n' + "</transactions>");
 
 			} catch (FileNotFoundException e1) {
@@ -200,7 +201,7 @@ public class Transaction {
 			node.appendChild(coin);
 			node.appendChild(hashs);
 
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -223,7 +224,7 @@ public class Transaction {
 	}
 	
 	public static int getMaxId() {
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -248,7 +249,7 @@ public class Transaction {
 	}
 
 	public static Transaction getTransaction(int id) {
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -289,7 +290,7 @@ public class Transaction {
 	}
 	
 	public static void deleteTransaction(int id){
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -308,7 +309,7 @@ public class Transaction {
 			root.removeChild((Node)trans);
 			
 			try (PrintStream out = new PrintStream(new FileOutputStream(
-					filename))) {
+					FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -329,7 +330,7 @@ public class Transaction {
 	}
 	
 	public static Transaction getEmissionTransaction(){
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -348,10 +349,10 @@ public class Transaction {
 				return null;
 			}
 			double coin = Double.parseDouble(trans.getElementsByTagName("coin").item(0).getTextContent());
-			coin = coin / 2.0;
+			coin = coin / EMISSION_DIVISOR;
 			trans.getElementsByTagName("coin").item(0).setTextContent(Double.toString(coin));
 			
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -370,7 +371,7 @@ public class Transaction {
 	}
 	
 	public List<Transaction> getTrascationToProve(){
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		List<Transaction> l = new ArrayList<Transaction>();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
