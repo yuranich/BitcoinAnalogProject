@@ -68,6 +68,10 @@ public class Receiver {
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+				
+				Transaction.updateTransaction(message.getEmissionFrom(), message.getEmissionTo(), 
+						message.getEmissMoney(), message.getEmissionTransId(), message.getEmissionHash());
+				
 				Block recv = new Block();
 				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());
 				recv.updateblock(message.getBlockId(), message.getTransactionId());

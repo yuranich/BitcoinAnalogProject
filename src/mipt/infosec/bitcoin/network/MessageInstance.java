@@ -17,6 +17,7 @@ public class MessageInstance {
 	private int emissionTransId;
 	private String emissionTo;
 	private String emissionFrom;
+	private double emissMoney;
 	private String emissionHash;
 	
 	public String getEmissionFrom() {
@@ -133,6 +134,14 @@ public class MessageInstance {
 		this.emissionHash = emissionHash;
 	}
 
+	public double getEmissMoney() {
+		return emissMoney;
+	}
+
+	public void setEmissMoney(double emissMoney) {
+		this.emissMoney = emissMoney;
+	}
+
 	public void parseMessage(List<String> message) {
 		type = Integer.parseInt(message.get(0));
 		switch (type) {
@@ -142,18 +151,24 @@ public class MessageInstance {
 			case Protocol.NEW_TRANSACTION:
 				from = message.get(1);
 				to   = message.get(2);
+				money = Double.parseDouble(message.get(3));
 				transactionId   = Integer.parseInt(message.get(3));
 				transactionHash = message.get(4);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				from  = message.get(1);
 				to    = message.get(2);
-				money = Integer.parseInt(message.get(3));
+				money = Double.parseDouble(message.get(3));
 				transactionId   = Integer.parseInt(message.get(4));
 				transactionHash = message.get(5);
 				blockId = Integer.parseInt(message.get(6));
 				blockHash = message.get(7);
 				prevBlockHash = message.get(8);
+				emissionFrom = message.get(9);
+				emissionTo   = message.get(10);
+				emissMoney   = Double.parseDouble(message.get(11));
+				emissionTransId = Integer.parseInt(message.get(12));
+				emissionHash    = message.get(13);
 				break;			
 			default: throw new RuntimeException("Unknown message type!");
 		}
@@ -182,6 +197,12 @@ public class MessageInstance {
 				newMessage.add(Integer.toString(blockId));
 				newMessage.add(blockHash);
 				newMessage.add(prevBlockHash);
+				newMessage.add(emissionFrom);
+				newMessage.add(emissionTo);
+				newMessage.add(Double.toString(emissMoney));
+				newMessage.add(Integer.toString(emissionTransId));
+				newMessage.add(emissionHash);
+				
 				break;
 			default: throw new RuntimeException("Unknown transaction type!");
 		}
@@ -197,6 +218,11 @@ public class MessageInstance {
 					   + "\n               transaction hash: " + transactionHash
 					   + "\n               block id: " + blockId
 					   + "\n               block hash: " + blockHash
-					   + "\n               prev block hash: " + prevBlockHash);
+					   + "\n               prev block hash: " + prevBlockHash
+					   + "\n               emission from: " + emissionFrom
+					   + "\n               emission to: " + emissionTo
+					   + "\n               emission money: " + emissMoney
+					   + "\n               emission id: " + emissionTransId
+					   + "\n               emission hash: " + emissionHash);
 	}
 }
