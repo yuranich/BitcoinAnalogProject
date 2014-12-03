@@ -22,11 +22,10 @@ public class Receiver {
 	
 	public void receive() {
         try (ServerSocket welcomeSocket = new ServerSocket(Protocol.CONNECTION_PORT)) {
+        	System.out.println("My addr is " + MY_ADDR);
         	while(true)
         	{
         		try {
-        			System.out.println("My addr is " + MY_ADDR);
-        			System.out.println("Before acception of socket connection");
         			Socket connectionSocket = welcomeSocket.accept();
         			System.out.println("Socket connection accepted");
         			InputStreamReader inputFromParticipant = new InputStreamReader(connectionSocket.getInputStream());
@@ -64,10 +63,10 @@ public class Receiver {
 			case Protocol.NEW_NODE: //TODO: some actions.
 				break;
 			case Protocol.NEW_TRANSACTION: 
-				new Transaction().createTransaction(message.getFrom(), message.getTo(), message.getMoney());
+				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), message.getTo(), message.getMoney(), message.getTransactionHash());
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
-				new Transaction().updateTransaction(message.getFrom(), message.getTo(), 
+				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
 				Block recv = new Block();
 				recv.createReceivedBlock(message.getBlockId(), message.getBlockHash(), message.getPrevBlockHash());

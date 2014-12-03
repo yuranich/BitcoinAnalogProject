@@ -8,7 +8,7 @@ public class MessageInstance {
 	private int type;
 	private String from;
 	private String to;
-	private int money;
+	private double money;
 	private int transactionId;
 	private String transactionHash;
 	private int blockId;
@@ -17,6 +17,7 @@ public class MessageInstance {
 	private int emissionTransId;
 	private String emissionTo;
 	private String emissionFrom;
+	private String emissionHash;
 	
 	public String getEmissionFrom() {
 		return emissionFrom;
@@ -75,11 +76,11 @@ public class MessageInstance {
 		this.to = to;
 	}
 
-	public int getMoney() {
+	public double getMoney() {
 		return money;
 	}
 
-	public void setMoney(int money) {
+	public void setMoney(double money) {
 		this.money = money;
 	}
 	
@@ -123,6 +124,15 @@ public class MessageInstance {
 		this.prevBlockHash = prevBlockHash;
 	}
 
+	
+	public String getEmissionHash() {
+		return emissionHash;
+	}
+
+	public void setEmissionHash(String emissionHash) {
+		this.emissionHash = emissionHash;
+	}
+
 	public void parseMessage(List<String> message) {
 		type = Integer.parseInt(message.get(0));
 		switch (type) {
@@ -159,13 +169,14 @@ public class MessageInstance {
 			case Protocol.NEW_TRANSACTION:
 				newMessage.add(from);
 				newMessage.add(to);
+				newMessage.add(Double.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				newMessage.add(from);
 				newMessage.add(to);
-				newMessage.add(Integer.toString(money));
+				newMessage.add(Double.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
 				newMessage.add(Integer.toString(blockId));

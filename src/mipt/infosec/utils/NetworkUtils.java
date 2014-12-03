@@ -2,6 +2,7 @@ package mipt.infosec.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Collection;
 import java.util.Properties;
@@ -25,6 +26,8 @@ public class NetworkUtils {
 		try (Socket receiver = new Socket(address, Protocol.CONNECTION_PORT)) {
 			OutputStream out = receiver.getOutputStream();
 			IOUtils.writeLines(message, "\n", out);
-		} 
+		} catch (IOException e) {
+			System.out.println("Abonent with address " + address + " is offline");
+		}
 	}
 }

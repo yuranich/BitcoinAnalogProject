@@ -29,6 +29,7 @@ public class Notifier {
 		message.setType(Protocol.NEW_TRANSACTION);
 		message.setFrom(transaction.getFrom());
 		message.setTo(transaction.getTo());
+		message.setMoney(transaction.getMoney());
 		message.setTransactionId(transaction.getId());
 		message.setTransactionHash(transaction.getHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
@@ -47,6 +48,7 @@ public class Notifier {
 		message.setEmissionTransId(trans.getId());
 		message.setEmissionTo(trans.getTo());
 		message.setEmissionFrom(trans.getFrom());
+		message.setEmissionHash(trans.getHash());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	

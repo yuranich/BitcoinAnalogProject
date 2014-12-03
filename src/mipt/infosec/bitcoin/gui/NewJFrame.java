@@ -353,7 +353,7 @@ public class NewJFrame extends javax.swing.JFrame {
         	}
 
         };
-//!server.start();
+        server.start();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

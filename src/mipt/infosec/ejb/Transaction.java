@@ -33,12 +33,12 @@ public class Transaction {
 	public static final String defaultfile = "<transactions>\n</transactions>";
 	private String from = "";
 	private String to = "";
-	private int money = 0;
+	private double money = 0;
 	private String hash = "";
 	private String signature = "";
 	private int id = 0;
 
-	public void updateTransaction(String from, String to, int money, int max, String hash) {
+	public static void updateTransaction(String from, String to, double money, int id, String hash) {
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -50,17 +50,16 @@ public class Transaction {
 			Element trans = null;
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
-				if (Integer.parseInt(node.getAttribute("id")) == max) {
+				if (Integer.parseInt(node.getAttribute("id")) == id) {
 					
 					trans = node;
 				}
 			}
 			trans.getElementsByTagName("from").item(0).setTextContent(from);
 			trans.getElementsByTagName("to").item(0).setTextContent(to);
-			trans.getElementsByTagName("coin").item(0).setTextContent(Integer.toString(money));
+			trans.getElementsByTagName("coin").item(0).setTextContent(Double.toString(money));
 			trans.getElementsByTagName("hash").item(0).setTextContent(hash);
-			try (PrintStream out = new PrintStream(new FileOutputStream(
-					filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -82,11 +81,9 @@ public class Transaction {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-
 	}
 
-	public void createTransaction(String from, String to, int money) {
+	public static void createTransaction(String from, String to, double money) {
 		File f = new File(filename);
 
 		if (!f.exists() || f.length() == 0) {
@@ -119,7 +116,7 @@ public class Transaction {
 			Element sendTO = document.createElement("to");
 			sendTO.appendChild(document.createTextNode(to));
 			Element coin = document.createElement("coin");
-			coin.appendChild(document.createTextNode(Integer.toString(money)));
+			coin.appendChild(document.createTextNode(Double.toString(money)));
 			byte[] id = BigInteger.valueOf(maxId + 1).toByteArray();
 			Stribog stb = new Stribog(256);
 			byte[] hash = stb.getHash(id);
@@ -132,8 +129,7 @@ public class Transaction {
 			node.appendChild(coin);
 			node.appendChild(hashs);
 
-			try (PrintStream out = new PrintStream(new FileOutputStream(
-					filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -153,20 +149,90 @@ public class Transaction {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 	}
 
+	public static void createReceivedTransaction(int id, String from, String to, double money, String hash) {
+		boolean not_max = false;
+		if (id <= Transaction.getMaxId()) {
+			if (Transaction.getTransaction(id) != null) {
+				Transaction.updateTransaction(from, to, money, id, hash);
+				return;
+			}
+			not_max = true;
+		}
+		File f = new File(filename);
+
+		if (!f.exists() || f.length() == 0) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				out.print("<transactions>" + '\n' + "</transactions>");
+
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+			
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(f);
+
+			Element root = document.getDocumentElement();
+			Element node = document.createElement("transaction");
+			node.setAttribute("id", Integer.toString(id));
+			root.appendChild(node);
+			
+			if (!not_max)
+				root.setAttribute("maxid", Integer.toString(id));
+			
+			Element sendFrom = document.createElement("from");
+			sendFrom.appendChild(document.createTextNode(from));
+			Element sendTO = document.createElement("to");
+			sendTO.appendChild(document.createTextNode(to));
+			Element coin = document.createElement("coin");
+			coin.appendChild(document.createTextNode(Double.toString(money)));
+
+			Element hashs = document.createElement("hash");
+			hashs.appendChild(document.createTextNode(hash));
+			node.appendChild(sendFrom);
+			node.appendChild(sendTO);
+			node.appendChild(coin);
+			node.appendChild(hashs);
+
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
 	public static int getMaxId() {
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
 		try {
-		builder = factory.newDocumentBuilder();
-		Document document = builder.parse(file);
-	    Element root = document.getDocumentElement();
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			Element root = document.getDocumentElement();
 		
-			return Integer.parseInt(root.getAttribute("maxid"));
+			return "".equals(root.getAttribute("maxid"))? 0: Integer.parseInt(root.getAttribute("maxid"));
 
 		} catch (ParserConfigurationException e) {
 			System.out.println("Can parse file");
@@ -181,7 +247,7 @@ public class Transaction {
 		return 0;
 	}
 
-	public Transaction getTransaction(int id) {
+	public static Transaction getTransaction(int id) {
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -197,11 +263,14 @@ public class Transaction {
 					trans = node;
 				}
 			}
+			if (trans == null) {
+				return null;
+			}
 			Transaction tr = new Transaction();
 			tr.setId(id);
 			tr.setFrom(trans.getElementsByTagName("from").item(0).getTextContent());
 			tr.setTo(trans.getElementsByTagName("to").item(0).getTextContent());
-			tr.setMoney(Integer.parseInt(trans.getElementsByTagName("coin").item(0).getTextContent()));
+			tr.setMoney(Double.parseDouble(trans.getElementsByTagName("coin").item(0).getTextContent()));
 			tr.setHash(trans.getElementsByTagName("hash").item(0).getTextContent());
 			return tr;
 
@@ -219,7 +288,7 @@ public class Transaction {
 
 	}
 	
-	public void deleteTransaction(int id){
+	public static void deleteTransaction(int id){
 		File file = new File(filename);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -276,13 +345,11 @@ public class Transaction {
 					trans = node;
 				}
 			}
-			Element t = document.getDocumentElement();
-			int coin = Integer.parseInt(t.getElementsByTagName("coin").item(0).getTextContent());
-			coin = coin / 2;
-			t.getElementsByTagName("coin").item(0).setTextContent(Integer.toString(coin));
+			double coin = Double.parseDouble(trans.getElementsByTagName("coin").item(0).getTextContent());
+			coin = coin / 2.0;
+			trans.getElementsByTagName("coin").item(0).setTextContent(Double.toString(coin));
 			
-			try (PrintStream out = new PrintStream(new FileOutputStream(
-					filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -290,16 +357,13 @@ public class Transaction {
 			}
 			
 		}catch (ParserConfigurationException e) {
-			System.out.println("Can parse file");
+			System.out.println("Can't parse file");
 			e.printStackTrace();
-	} catch (SAXException e) {
+		} catch (SAXException e) {
 			e.printStackTrace();
-	} catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-	}
-		
-		
-		
+		}
 		return tr.getTransaction(0);
 	}
 	
@@ -357,11 +421,11 @@ public class Transaction {
 		this.hash = hash;
 	}
 
-	public int getMoney() {
+	public double getMoney() {
 		return money;
 	}
 
-	public void setMoney(int money) {
+	public void setMoney(double money) {
 		this.money = money;
 	}
 

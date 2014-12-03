@@ -179,7 +179,7 @@ public class Block implements Serializable {
 			Element sendTO = document.createElement("to");
 			sendTO.appendChild(document.createTextNode(cur.getTo()));
 			Element coin = document.createElement("coin");
-			coin.appendChild(document.createTextNode(Integer.toString(cur.getMoney())));
+			coin.appendChild(document.createTextNode(Double.toString(cur.getMoney())));
 			Element hashs = document.createElement("hash");
 			hashs.appendChild(document.createTextNode(cur.getHash()));
 			
@@ -290,61 +290,6 @@ public class Block implements Serializable {
 			}
 
 	}
-	
-	public void addTransaction(int blockid, int transid)
-	{
-		File f = new File(filename);
-
-			try {
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setNamespaceAware(true);
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document document = builder.parse(f);
-
-				Element root = document.getDocumentElement();
-				NodeList nl = document.getElementsByTagName("block");
-				Element node = null;
-				for( int i = 0; i < nl.getLength(); i++){
-					Element e = (Element) nl.item(i);
-					if ( Integer.parseInt(e.getAttribute("id")) == blockid ) node = e;
-				}
-				
-				Element transac = document.createElement("transaction");
-				transac.appendChild(document.createTextNode(Integer.toString(transid)));
-				byte[] id = BigInteger.valueOf(transid).toByteArray();
-				Stribog stb = new Stribog(256);
-				byte[] hash = stb.getHash(id);
-				BigInteger bhash = new BigInteger(hash);
-
-				Element hashs = document.createElement("hash");
-				hashs.appendChild(document.createTextNode(bhash.toString()));
-				transac.appendChild(hashs);
-				root.appendChild(node);
-				node.appendChild(transac);
-				
-				try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
-					out.print(XmlUtils.toXML(document));
-				} catch (TransformerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	}
-	
-	
 	
 	public static int getMaxId() {
 		File file = new File(filename);
