@@ -9,6 +9,7 @@ import com.sun.xml.internal.messaging.saaj.packaging.mime.util.OutputUtil;
 
 import mipt.infosec.bitcoin.network.Notifier;
 import mipt.infosec.bitcoin.network.Receiver;
+import mipt.infosec.bitcoin.wallet.Wallet;
 import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
 import mipt.infosec.secutils.hash.Stribog;
@@ -81,19 +82,11 @@ public class Controller {
 		return Boolean.TRUE;
 	}
 	
-//	//This method is used when new information about transaction in the network was got
-//	public static void updateTransaction(Transaction transaction) {
-//		Transaction trans = new Transaction();
-//		trans.updateTransaction(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
-//	}
-	
-//	//This method is used when new information about block in the network was got
-//	public static void updateBlock(Block block) {
-//		Block blocks = new Block();
-//		//TODO: need new class Block
-//		//blocks.updateBlock(transaction.getFrom(),transaction.getTo(),transaction.getMoney(),transaction.getId(),transaction.getHash());
-//	}
-	
+	public static void updateWallet (double quantity) {
+		Wallet.getInstance().reduceSumm(quantity);
+		//TODO: call method from GUI to update money on screen.
+		
+	}
 	public static byte[] serialize(Object object) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         ObjectOutputStream output = new ObjectOutputStream(bytes);

@@ -107,7 +107,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
 ///////////////        
-        Wallet wal = new Wallet();
+        Wallet wal = Wallet.getInstance();
         Double x = wal.getSumm();
         jLabel2.setText(x.toString());
 ////////////////

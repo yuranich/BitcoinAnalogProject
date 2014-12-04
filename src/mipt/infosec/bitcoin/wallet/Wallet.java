@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.ejb.Block;
 
 import org.w3c.dom.Document;
@@ -16,12 +17,14 @@ import org.xml.sax.SAXException;
 
 public class Wallet {
 	private double summ;
+	private static Wallet instance;
+	private static double INITIAL_MONEY = 10.0;
 	
-	public Wallet() {
+	private Wallet() {
+		summ = INITIAL_MONEY;
+		
 		File file = new File(Block.FILE_NAME);
-
 		if (!file.exists() || file.length() == 0) {
-			summ = 0;
 			return;
 		}
 		
@@ -34,9 +37,8 @@ public class Wallet {
 			NodeList nl = document.getElementsByTagName("transaction");
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element node = (Element) nl.item(i);
-				if (Integer.parseInt(node.getAttribute("id")) == 0) {
-					double coin = Double.parseDouble(node.getElementsByTagName("coin").item(0).getTextContent());
-					summ += coin;
+				if (Receiver.MY_ADDR.equals(node.getElementsByTagName("to").item(0).getTextContent())) {					
+					summ += Double.parseDouble(node.getElementsByTagName("coin").item(0).getTextContent());
 				}
 			}
 		}catch (ParserConfigurationException e) {
@@ -49,6 +51,12 @@ public class Wallet {
 		} 
 	}
 
+	public static Wallet getInstance() {
+		if (instance == null) {
+			instance = new Wallet();
+		}
+		return instance;
+	}
 	
 	public double getSumm() {
 		return this.summ;
