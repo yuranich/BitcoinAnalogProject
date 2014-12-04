@@ -19,6 +19,8 @@ public class MessageInstance {
 	private String emissionFrom;
 	private double emissMoney;
 	private String emissionHash;
+	private String signature;
+	private String emissionSignature;
 	
 	public String getEmissionFrom() {
 		return emissionFrom;
@@ -141,6 +143,23 @@ public class MessageInstance {
 	public void setEmissMoney(double emissMoney) {
 		this.emissMoney = emissMoney;
 	}
+	
+	
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	
+	public String getEmissionSignature() {
+		return emissionSignature;
+	}
+
+	public void setEmissionSignature(String emissionSignature) {
+		this.emissionSignature = emissionSignature;
+	}
 
 	public void parseMessage(List<String> message) {
 		type = Integer.parseInt(message.get(0));
@@ -154,6 +173,7 @@ public class MessageInstance {
 				money = Double.parseDouble(message.get(3));
 				transactionId   = Integer.parseInt(message.get(3));
 				transactionHash = message.get(4);
+				signature = message.get(5);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				from  = message.get(1);
@@ -161,14 +181,16 @@ public class MessageInstance {
 				money = Double.parseDouble(message.get(3));
 				transactionId   = Integer.parseInt(message.get(4));
 				transactionHash = message.get(5);
-				blockId = Integer.parseInt(message.get(6));
-				blockHash = message.get(7);
-				prevBlockHash = message.get(8);
-				emissionFrom = message.get(9);
-				emissionTo   = message.get(10);
-				emissMoney   = Double.parseDouble(message.get(11));
-				emissionTransId = Integer.parseInt(message.get(12));
-				emissionHash    = message.get(13);
+				signature = message.get(6);
+				blockId = Integer.parseInt(message.get(7));
+				blockHash = message.get(8);
+				prevBlockHash = message.get(9);
+				emissionFrom = message.get(10);
+				emissionTo   = message.get(11);
+				emissMoney   = Double.parseDouble(message.get(12));
+				emissionTransId = Integer.parseInt(message.get(13));
+				emissionHash    = message.get(14);
+				emissionSignature = message.get(15);
 				break;			
 			default: throw new RuntimeException("Unknown message type!");
 		}
@@ -187,6 +209,7 @@ public class MessageInstance {
 				newMessage.add(Double.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
+				newMessage.add(signature);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				newMessage.add(from);
@@ -202,7 +225,7 @@ public class MessageInstance {
 				newMessage.add(Double.toString(emissMoney));
 				newMessage.add(Integer.toString(emissionTransId));
 				newMessage.add(emissionHash);
-				
+				newMessage.add(emissionSignature);
 				break;
 			default: throw new RuntimeException("Unknown transaction type!");
 		}
@@ -216,6 +239,7 @@ public class MessageInstance {
 					   + "\n               money: " + money
 					   + "\n               transaction id: " + transactionId
 					   + "\n               transaction hash: " + transactionHash
+					   + "\n               transaction signature: " + signature
 					   + "\n               block id: " + blockId
 					   + "\n               block hash: " + blockHash
 					   + "\n               prev block hash: " + prevBlockHash
@@ -223,6 +247,7 @@ public class MessageInstance {
 					   + "\n               emission to: " + emissionTo
 					   + "\n               emission money: " + emissMoney
 					   + "\n               emission id: " + emissionTransId
-					   + "\n               emission hash: " + emissionHash);
+					   + "\n               emission hash: " + emissionHash
+					   + "\n               emission signature: " + emissionSignature);
 	}
 }

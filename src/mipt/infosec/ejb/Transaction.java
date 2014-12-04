@@ -445,4 +445,13 @@ public class Transaction {
 		this.id = id;
 	}
 
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	
+	
 }

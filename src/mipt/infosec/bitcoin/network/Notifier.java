@@ -32,6 +32,7 @@ public class Notifier {
 		message.setMoney(transaction.getMoney());
 		message.setTransactionId(transaction.getId());
 		message.setTransactionHash(transaction.getHash());
+		message.setSignature(transaction.getSignature());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
@@ -42,6 +43,7 @@ public class Notifier {
 		message.setMoney(transaction.getMoney());
 		message.setTransactionId(transaction.getId());
 		message.setTransactionHash(transaction.getHash());
+		message.setSignature(transaction.getSignature());
 		message.setBlockId(block.getId());
 		message.setBlockHash(block.getHash());
 		message.setPrevBlockHash(block.getPrevHash());
@@ -50,6 +52,7 @@ public class Notifier {
 		message.setEmissMoney(trans.getMoney());
 		message.setEmissionFrom(trans.getFrom());
 		message.setEmissionHash(trans.getHash());
+		message.setEmissionSignature(trans.getSignature());
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
