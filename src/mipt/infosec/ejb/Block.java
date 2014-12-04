@@ -22,8 +22,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Block implements Serializable {
-	public static final String filename = "block.xml";
-	public static final String defaultfile = "<blocks>\n</blocks>";
+	public static final String FILE_NAME = "block.xml";
+	public static final String DEFAULT_TAG = "<blocks>\n</blocks>";
 	private int id;
 	private String hash;
 	private String prevHash;
@@ -53,7 +53,7 @@ public class Block implements Serializable {
 	}
 
 	public Block getBlock(int id){
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
@@ -98,11 +98,11 @@ public class Block implements Serializable {
 	
 	
 	public void createReceivedBlock(int blockId, String blockHash, String prevHash) {
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 		
 		if (!f.exists() || f.length() == 0){
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
-				out.print(defaultfile);
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
+				out.print(DEFAULT_TAG);
 			
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -131,7 +131,7 @@ public class Block implements Serializable {
 			
 			root.setAttribute("maxid",Integer.toString(id));
 			
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -157,7 +157,7 @@ public class Block implements Serializable {
 		Transaction tr = new Transaction();
 		Transaction cur = tr.getTransaction(transacId);
 		if ( transacId != 0) tr.deleteTransaction(transacId);
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
@@ -176,7 +176,7 @@ public class Block implements Serializable {
 				return;
 			}
 			Element transac = document.createElement("transaction");
-			transac.appendChild(document.createTextNode(Integer.toString(transacId)));
+			transac.setAttribute("id", Integer.toString(transacId));
 			Element sendFrom = document.createElement("from");
 			sendFrom.appendChild(document.createTextNode(cur.getFrom()));
 			Element sendTO = document.createElement("to");
@@ -192,9 +192,8 @@ public class Block implements Serializable {
 			transac.appendChild(hashs);
 			
 			block.appendChild(transac);
-			
-			
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+						
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
@@ -222,11 +221,11 @@ public class Block implements Serializable {
 	}
 	
 	public void createBlock() {
-		File f = new File(filename);
+		File f = new File(FILE_NAME);
 		
 		if (!f.exists() || f.length() == 0){
-			try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
-				out.print(defaultfile);
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
+				out.print(DEFAULT_TAG);
 			
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -271,7 +270,7 @@ public class Block implements Serializable {
 				
 				root.setAttribute("maxid",Integer.toString(maxId+1));
 				
-				try (PrintStream out = new PrintStream(new FileOutputStream(filename))) {
+				try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 					out.print(XmlUtils.toXML(document));
 				} catch (TransformerException e) {
 					// TODO Auto-generated catch block
@@ -295,7 +294,7 @@ public class Block implements Serializable {
 	}
 	
 	public static int getMaxId() {
-		File file = new File(filename);
+		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;

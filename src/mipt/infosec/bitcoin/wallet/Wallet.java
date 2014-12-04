@@ -1,49 +1,66 @@
 package mipt.infosec.bitcoin.wallet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import mipt.infosec.ejb.Block;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class Wallet {
-	private int summ;
-	private DataInputStream file; 
+	private double summ;
 	
 	public Wallet() {
+		File file = new File(Block.FILE_NAME);
+
+		if (!file.exists() || file.length() == 0) {
+			summ = 0;
+			return;
+		}
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
 		try {
-			this.file =  new DataInputStream(new FileInputStream("Wallet.txt"));
-			System.out.println("ПРочел");
-			
-				Scanner scanner = null;
-				scanner = new Scanner(file);
-				summ = scanner.nextInt();
-				//String s = file.readLine();
-			
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			NodeList nl = document.getElementsByTagName("transaction");
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == 0) {
+					double coin = Double.parseDouble(node.getElementsByTagName("coin").item(0).getTextContent());
+					summ += coin;
+				}
+			}
+		}catch (ParserConfigurationException e) {
+			System.out.println("Can't parse file");
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		} 
 	}
 
 	
-	public int getSumm() {
+	public double getSumm() {
 		return this.summ;
 	}
 	
-	public int increaseSumm(int money) {
+	public double increaseSumm(double money) {
 		this.summ = this.summ + money;
 		return this.summ;
-		
 	}
 	
-	public int reduceSumm(int money) {
+	public double reduceSumm(double money) {
 		this.summ = this.summ - money;
 		return this.summ;	
 	}
-	
-	
-
 }

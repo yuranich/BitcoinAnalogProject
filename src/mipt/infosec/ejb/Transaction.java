@@ -153,14 +153,6 @@ public class Transaction {
 	}
 
 	public static void createReceivedTransaction(int id, String from, String to, double money, String hash) {
-		boolean not_max = false;
-		if (id <= Transaction.getMaxId()) {
-			if (Transaction.getTransaction(id) != null) {
-				Transaction.updateTransaction(from, to, money, id, hash);
-				return;
-			}
-			not_max = true;
-		}
 		File f = new File(FILE_NAME);
 
 		if (!f.exists() || f.length() == 0) {
@@ -173,6 +165,15 @@ public class Transaction {
 			}
 		}
 			
+		boolean not_max = false;
+		if (id <= Transaction.getMaxId()) {
+			if (Transaction.getTransaction(id) != null) {
+				Transaction.updateTransaction(from, to, money, id, hash);
+				return;
+			}
+			not_max = true;
+		}
+
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
@@ -331,6 +332,10 @@ public class Transaction {
 	
 	public static Transaction getEmissionTransaction(){
 		File file = new File(FILE_NAME);
+		if (!file.exists() || file.length() == 0) {
+			return null;
+		}
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -372,7 +377,12 @@ public class Transaction {
 	
 	public List<Transaction> getTrascationToProve(){
 		File file = new File(FILE_NAME);
+
 		List<Transaction> l = new ArrayList<Transaction>();
+		if (!file.exists() || file.length() == 0) {
+			return l;
+		}
+		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder;
@@ -384,7 +394,6 @@ public class Transaction {
 				Element node = (Element) nl.item(i);
 				if (Integer.parseInt(node.getAttribute("id")) != 0) l.add(Transaction.getTransaction(Integer.parseInt(node.getAttribute("id")))); 
 			}
-			return l;
 		}catch (ParserConfigurationException e) {
 			System.out.println("Can't parse file");
 			e.printStackTrace();
@@ -393,7 +402,7 @@ public class Transaction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return l;
 	}
 
 	public String getFrom() {
