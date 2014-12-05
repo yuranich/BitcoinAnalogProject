@@ -79,13 +79,13 @@ public class Controller {
 		block.updateblock(Block.getMaxId(), trans.getId());
 		notifier.sendBlockCreatedMessage(block.getBlock(Block.getMaxId()), transaction, trans);
 		
-		updateWallet(trans.getMoney());
+		addToWallet(trans.getMoney());
 		
 		return Boolean.TRUE;
 	}
 	
-	public static void updateWallet (double quantity) {
-		Wallet.getInstance().reduceSumm(quantity);
+	public static void addToWallet (double quantity) {
+		Wallet.getInstance().increaseSumm(quantity);
 		System.out.println(Wallet.getInstance().getSumm());
 	}
 	

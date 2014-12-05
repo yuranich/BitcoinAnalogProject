@@ -64,17 +64,15 @@ public class Receiver {
 			case Protocol.NEW_NODE: //TODO: some actions.
 				break;
 			case Protocol.NEW_TRANSACTION: 
-				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), message.getTo(), message.getMoney(), message.getTransactionHash());
-				if (MY_ADDR.equals(message.getTo())) {
-					Controller.updateWallet(message.getMoney());
-				}
+				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), 
+						message.getTo(), message.getMoney(), message.getTransactionHash());
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
 				
 				if (MY_ADDR.equals(message.getTo())) {
-					Controller.updateWallet(message.getMoney());
+					Controller.addToWallet(message.getMoney());
 				}
 				
 				if (Transaction.getEmissionTransaction() == null) {

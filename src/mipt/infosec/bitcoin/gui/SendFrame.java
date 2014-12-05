@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 
 import mipt.infosec.bitcoin.gui.NewJFrame.HiPanel;
 import mipt.infosec.bitcoin.network.Receiver;
+import mipt.infosec.bitcoin.wallet.Wallet;
+import mipt.logiclayer.Controller;
 
 /**
  *
@@ -162,8 +164,9 @@ public class SendFrame extends JFrame {
 				sendname = jTextField1.getText();
 				summ = Integer.parseInt(jTextField2.getText());
 				try {
-					mipt.logiclayer.Controller.createTransaction(
+					Controller.createTransaction(
 							Receiver.MY_ADDR, sendname, summ);
+					Wallet.getInstance().reduceSumm(summ);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

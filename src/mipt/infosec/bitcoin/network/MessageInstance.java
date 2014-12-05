@@ -171,9 +171,9 @@ public class MessageInstance {
 				from = message.get(1);
 				to   = message.get(2);
 				money = Double.parseDouble(message.get(3));
-				transactionId   = Integer.parseInt(message.get(3));
-				transactionHash = message.get(4);
-				signature = message.get(5);
+				transactionId   = Integer.parseInt(message.get(4));
+				transactionHash = message.get(5);
+				signature = message.get(6);
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				from  = message.get(1);
@@ -217,6 +217,7 @@ public class MessageInstance {
 				newMessage.add(Double.toString(money));
 				newMessage.add(Integer.toString(transactionId));
 				newMessage.add(transactionHash);
+				newMessage.add(signature);
 				newMessage.add(Integer.toString(blockId));
 				newMessage.add(blockHash);
 				newMessage.add(prevBlockHash);
