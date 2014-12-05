@@ -79,14 +79,16 @@ public class Controller {
 		block.updateblock(Block.getMaxId(), trans.getId());
 		notifier.sendBlockCreatedMessage(block.getBlock(Block.getMaxId()), transaction, trans);
 		
+		updateWallet(trans.getMoney());
+		
 		return Boolean.TRUE;
 	}
 	
 	public static void updateWallet (double quantity) {
 		Wallet.getInstance().reduceSumm(quantity);
-		//TODO: call method from GUI to update money on screen.
-		
+		System.out.println(Wallet.getInstance().getSumm());
 	}
+	
 	public static byte[] serialize(Object object) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         ObjectOutputStream output = new ObjectOutputStream(bytes);

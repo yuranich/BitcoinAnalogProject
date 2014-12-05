@@ -12,6 +12,7 @@ import java.util.Enumeration;
 
 import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
+import mipt.logiclayer.Controller;
 
 import org.apache.commons.io.IOUtils;
 
@@ -64,10 +65,17 @@ public class Receiver {
 				break;
 			case Protocol.NEW_TRANSACTION: 
 				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), message.getTo(), message.getMoney(), message.getTransactionHash());
+				if (MY_ADDR.equals(message.getTo())) {
+					Controller.updateWallet(message.getMoney());
+				}
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
 						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+				
+				if (MY_ADDR.equals(message.getTo())) {
+					Controller.updateWallet(message.getMoney());
+				}
 				
 				if (Transaction.getEmissionTransaction() == null) {
 					Transaction.createReceivedTransaction(message.getEmissionTransId(), message.getEmissionFrom(), 
