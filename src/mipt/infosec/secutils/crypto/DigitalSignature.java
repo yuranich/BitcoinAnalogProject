@@ -9,6 +9,7 @@ import java.security.Signature;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SignatureException;
+import java.util.Arrays;
 
 public class DigitalSignature {
 
@@ -18,7 +19,24 @@ public class DigitalSignature {
 	private static final String RSA_SIGNING_ALGORITHM = "MD5WithRSA";
 	private static final int RSA_LENGTH = 1024;
 	
+	/** 
+	 * This method returns a pair of strings.
+	 * These two strings are public and private keys.
+	 */
+	public static StringKeyPair getKeyPair() throws NoSuchAlgorithmException {
+		StringKeyPair pair = new StringKeyPair();
+		
+		KeyPair keyPair = generateKeyPair();
+		pair.setPrivateKey(keyPair.getPrivate().getEncoded().toString());
+		pair.setPublicKey(keyPair.getPublic().getEncoded().toString());
+		
+		return pair;
+	}
 	
+	/** 
+	 * This method returns a pair of keys as a Java object.
+	 * It may be used not only for RSA, but for other common algorithms.
+	 */
 	public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance(RSA);
 	    kpg.initialize(RSA_LENGTH);
