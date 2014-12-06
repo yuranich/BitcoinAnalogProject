@@ -15,5 +15,29 @@
       <coin>5.0</coin>
       <hash>no hash</hash>
     </transaction>
+    <transaction id="4">
+      <from>169.254.144.250</from>
+      <to>169.254.244.101</to>
+      <coin>4.0</coin>
+      <hash>36882560224107740689766844050865456293941164033433533550072105444738591097579</hash>
+    </transaction>
+    <transaction id="0">
+      <from/>
+      <to>169.254.144.250</to>
+      <coin>4.545454545454545</coin>
+      <hash>no hash</hash>
+    </transaction>
+    <transaction id="5">
+      <from>169.254.144.250</from>
+      <to>169.254.244.101</to>
+      <coin>5.0</coin>
+      <hash>31594949177573669881120558110993529329688033628867799759613148947530270563500</hash>
+    </transaction>
+    <transaction id="0">
+      <from/>
+      <to>169.254.144.250</to>
+      <coin>4.545454545454545</coin>
+      <hash>no hash</hash>
+    </transaction>
   </block>
 </blocks>

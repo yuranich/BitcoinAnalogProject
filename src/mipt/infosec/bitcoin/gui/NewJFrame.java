@@ -1,24 +1,22 @@
 package mipt.infosec.bitcoin.gui;
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.Integer;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
@@ -33,9 +31,10 @@ import mipt.infosec.bitcoin.wallet.Wallet;
  *
  * @author днс
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class NewJFrame extends JFrame {
 
-    public static Toolkit kit = Toolkit.getDefaultToolkit();
+    private static final int WALLET_TIMER_PERIOD = 30000;
+	public static Toolkit kit = Toolkit.getDefaultToolkit();
     public static Dimension screenSize = kit.getScreenSize();
     public static int screenWidth = (int)(screenSize.width);
     public static int screenHeight = (int)(screenSize.height);
@@ -57,7 +56,20 @@ public class NewJFrame extends javax.swing.JFrame {
         panel.setBackground(Color.WHITE);
         
         add(panel);
+        
+        
+        ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {	
+				jLabel2.setText(Double.toString(Wallet.getInstance().getSumm()));
+			}
+		};
+		
+		Timer timer = new Timer(WALLET_TIMER_PERIOD, listener);
+		timer.start();
     }
+    
     class HelloPanel extends JPanel {
 
         private BufferedImage image;
