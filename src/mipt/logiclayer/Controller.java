@@ -43,7 +43,7 @@ public class Controller {
 	}*/
 	
 	//This method is used for creating and sending broadcast about new transaction created
-	public static Boolean createTransaction(String from, String to, int money) throws IOException {
+	public static Boolean createTransaction(String from, String to, double money) throws IOException {
 		Transaction.createTransaction(from, to, money);
 		
 		Notifier notifier = new Notifier();

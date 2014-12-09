@@ -38,7 +38,7 @@ public class SendFrame extends JFrame {
 	public static int screenWidth = (int) (screenSize.width);
 	public static int screenHeight = (int) (screenSize.height);
 	private String sendname;
-	private int summ;
+	private double summ;
 
 	/**
 	 * Creates new form SendFrame
@@ -162,7 +162,7 @@ public class SendFrame extends JFrame {
 		jButton2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				sendname = jTextField1.getText();
-				summ = Integer.parseInt(jTextField2.getText());
+				summ = Double.parseDouble(jTextField2.getText());
 				try {
 					Controller.createTransaction(
 							Receiver.MY_ADDR, sendname, summ);
