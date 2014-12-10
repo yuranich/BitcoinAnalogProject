@@ -4,11 +4,19 @@ package mipt.infosec.bitcoin.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,10 +24,13 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.Timer;
 
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
+import mipt.infosec.ejb.Transaction;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -135,7 +146,7 @@ public class NewJFrame extends JFrame {
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/disk-minus-icon-icon.png"))); // NOI18N
-        jMenuItem2.setText("Сделать копию бумажника...");
+        jMenuItem2.setText("Показать доступные транзакции");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -165,6 +176,11 @@ public class NewJFrame extends JFrame {
 
         jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-email-icon.png"))); // NOI18N
         jMenuItem6.setText("Адреса получения...");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem6);
         jMenu1.add(jSeparator2);
 
@@ -254,7 +270,34 @@ public class NewJFrame extends JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+    	JFrame frame = new JFrame("Transaction frame");
+    	frame.setDefaultCloseOperation(WIDTH);
+    	frame.setTitle("Транзакции");
+    	frame.setLocation(screenWidth / 4, screenHeight / 4);
+    	
+    	String[] columnNames = {
+    					"Номер",
+    	                "От кого",
+    	                "Кому",
+    	                "Количество монет"
+    			 };
+    	 
+    	List<Transaction> availTrans = new Transaction().getTrascationToProve();
+    	List<String[]> data = new ArrayList<>();
+    	
+    	for (Transaction tr : availTrans) {
+    		data.add(new String[]{Integer.toString(tr.getId()), tr.getFrom(), tr.getTo(), Double.toString(tr.getMoney())});
+    	}
+    	
+    	JTable table = new JTable(data.toArray(new String[0][0]), columnNames);
+    	         
+    	JScrollPane scrollPane = new JScrollPane(table);
+    	        
+    	frame.getContentPane().add(scrollPane);
+    	frame.setPreferredSize(new Dimension(450, 200));
+    	frame.pack();
+    	frame.setLocationRelativeTo(null);
+    	frame.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
@@ -277,7 +320,47 @@ public class NewJFrame extends JFrame {
         frame.setTitle("Отравить сообщение");
         frame.setLocation(screenWidth / 4, screenHeight / 4);
     }
-    
+/////////////////////////////////////////////////////////
+	private void jMenuItem6ActionPerformed(ActionEvent evt) {
+		try {
+			JFrame frame = new JFrame("Addresses frame");
+			frame.setDefaultCloseOperation(WIDTH);
+			frame.setTitle("Адреса");
+			frame.setLocation(screenWidth / 4, screenHeight / 4);
+			
+			String[] columnNames = {
+							"Строка",
+			                "Адрес"
+					 };
+			
+			Properties addrs = new Properties();
+			addrs.load(new FileInputStream("addresses.properties"));
+			List<String[]> data = new ArrayList<>();
+			
+			for (Entry<Object, Object> addr : addrs.entrySet()) {
+				data.add(new String[]{(String)addr.getKey(), (String)addr.getValue()});
+			}
+			
+			Collections.sort(data, new Comparator<String[]>() {
+				public int compare(String[] row1, String[] row2) {
+					return Integer.parseInt(row1[0]) - Integer.parseInt(row2[0]);
+				}
+			});
+			
+			JTable table = new JTable(data.toArray(new String[0][0]), columnNames);
+			         
+			JScrollPane scrollPane = new JScrollPane(table);
+			        
+			frame.getContentPane().add(scrollPane);
+			frame.setPreferredSize(new Dimension(450, 200));
+			frame.pack();
+			frame.setLocationRelativeTo(null);
+			frame.setVisible(true);
+		} catch (HeadlessException | IOException e) {
+			Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, e);
+		}
+		
+	}
 //////////////////////////////////////////////////////////  
   
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed

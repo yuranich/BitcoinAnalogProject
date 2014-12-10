@@ -6,24 +6,16 @@
 
 package mipt.infosec.bitcoin.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-import mipt.infosec.bitcoin.gui.NewJFrame.HiPanel;
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
 import mipt.logiclayer.Controller;

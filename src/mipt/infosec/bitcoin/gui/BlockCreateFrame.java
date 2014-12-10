@@ -8,12 +8,10 @@ package mipt.infosec.bitcoin.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.ejb.Transaction;
 
 /**
@@ -97,7 +95,7 @@ public class BlockCreateFrame extends javax.swing.JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				int trans = Integer.parseInt(jTextField1.getText());
 				try {
-					mipt.logiclayer.Controller.createBlock(new Transaction().getTransaction(trans));
+					mipt.logiclayer.Controller.createBlock(Transaction.getTransaction(trans));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -106,7 +104,7 @@ public class BlockCreateFrame extends javax.swing.JFrame {
 				JOptionPane
 						.showMessageDialog(
 								null,
-								"Ваш перевод будет сделан как только кто-нибудь создаст блок",
+								"Блок успешно создан!",
 								"Отправка", JOptionPane.WARNING_MESSAGE);
 				dialog.dispose();
 			}
