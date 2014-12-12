@@ -3,6 +3,7 @@ package mipt.logiclayer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.security.PrivateKey;
 import java.util.Properties;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.OutputUtil;
@@ -43,9 +44,9 @@ public class Controller {
 	}*/
 	
 	//This method is used for creating and sending broadcast about new transaction created
-	public static Boolean createTransaction(String from, String to, double money) throws IOException {
+	public static Boolean createTransaction(String from, String to, double money,PrivateKey pr) throws IOException {
 		Transaction.createTransaction(from, to, money);
-		
+		Transaction.setSignatureForTransaction(Transaction.getMaxId(),pr);
 		Notifier notifier = new Notifier();
 		notifier.sendNewTransactionMessage(Transaction.getTransaction(Transaction.getMaxId()));
 		
