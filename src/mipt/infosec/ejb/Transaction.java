@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import mipt.infosec.secutils.crypto.DigitalSignature;
 import mipt.infosec.secutils.hash.Stribog;
 import mipt.infosec.utils.XmlUtils;
 
@@ -118,6 +120,8 @@ public class Transaction {
 			sendTO.appendChild(document.createTextNode(to));
 			Element coin = document.createElement("coin");
 			coin.appendChild(document.createTextNode(Double.toString(money)));
+			Element sign = document.createElement("signature");
+			coin.appendChild(document.createTextNode(""));
 			byte[] id = BigInteger.valueOf(maxId + 1).toByteArray();
 			Stribog stb = new Stribog(256);
 			byte[] hash = stb.getHash(id);
@@ -128,6 +132,7 @@ public class Transaction {
 			node.appendChild(sendFrom);
 			node.appendChild(sendTO);
 			node.appendChild(coin);
+			node.appendChild(sign);
 			node.appendChild(hashs);
 
 			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
@@ -152,6 +157,50 @@ public class Transaction {
 		}
 	}
 
+	
+	public static void setSignatureForTransaction(int transacId,PrivateKey privateKey){
+		File file = new File(FILE_NAME);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document document = builder.parse(file);
+			NodeList nl = document.getElementsByTagName("transaction");
+			Element trans = null;
+			for (int i = 0; i < nl.getLength(); i++) {
+				Element node = (Element) nl.item(i);
+				if (Integer.parseInt(node.getAttribute("id")) == transacId) {
+					trans = node;
+				}
+			}
+			trans.getElementsByTagName("signature").item(0).setTextContent(DigitalSignature.generateRSASignature(Integer.toBinaryString(transacId), privateKey).toString());
+			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
+				out.print(XmlUtils.toXML(document));
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+		
+		}catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+	}
+	
 	public static void createReceivedTransaction(int id, String from, String to, double money, String hash) {
 		File f = new File(FILE_NAME);
 
@@ -272,6 +321,7 @@ public class Transaction {
 			tr.setId(id);
 			tr.setFrom(trans.getElementsByTagName("from").item(0).getTextContent());
 			tr.setTo(trans.getElementsByTagName("to").item(0).getTextContent());
+			tr.setSignature(trans.getElementsByTagName("signature").item(0).getTextContent());
 			tr.setMoney(Double.parseDouble(trans.getElementsByTagName("coin").item(0).getTextContent()));
 			tr.setHash(trans.getElementsByTagName("hash").item(0).getTextContent());
 			return tr;
@@ -289,6 +339,8 @@ public class Transaction {
 		return null;
 
 	}
+	
+
 	
 	public static void deleteTransaction(int id){
 		File file = new File(FILE_NAME);
