@@ -63,10 +63,11 @@ public class DigitalSignature {
 	 * If the result is TRUE, then new block could be added to block.xml.
 	 * If the result is FALSE, then it means that somebody tries to attack our system and to make fraud transaction.
 	 */
-	public static Boolean checkSignature(String message, Signature signature, PublicKey publicKey) throws SignatureException, InvalidKeyException, 
-	                                                                                                  UnsupportedEncodingException {
+	public static Boolean checkSignature(String message, byte[] signatureBytes, PublicKey publicKey) throws SignatureException, InvalidKeyException, 
+	                                                                                                  UnsupportedEncodingException, NoSuchAlgorithmException {
 		byte[] data = message.getBytes(CHARSETNAME);
-		byte[] signatureBytes = signature.sign();
+		
+		Signature signature = Signature.getInstance(RSA_SIGNING_ALGORITHM);
 	    
 	    signature.initVerify(publicKey);
 	    signature.update(data);

@@ -16,7 +16,7 @@ public class TestNetwork {
 		server.start();
 		
 		try {
-			Controller.createTransaction(Receiver.MY_ADDR, "192.168.0.109", 10);
+			Controller.createTransaction(Receiver.MY_ADDR, "192.168.0.109", 10, null);
 			//Transaction trans = new Transaction();
 			//Controller.createBlock(trans.getTransaction(Transaction.getMaxId()));
 		} catch ( IOException e) {

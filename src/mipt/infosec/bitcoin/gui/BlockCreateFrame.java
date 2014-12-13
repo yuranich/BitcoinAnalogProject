@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import mipt.infosec.ejb.Transaction;
+import mipt.logiclayer.Controller;
 
 /**
  *
@@ -94,18 +95,28 @@ public class BlockCreateFrame extends javax.swing.JFrame {
         jButton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				int trans = Integer.parseInt(jTextField1.getText());
+				boolean isCreated = false;
 				try {
-					mipt.logiclayer.Controller.createBlock(Transaction.getTransaction(trans));
+					isCreated = Controller.createBlock(Transaction.getTransaction(trans));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				setVisible(false);
-				JOptionPane
-						.showMessageDialog(
-								null,
-								"Блок успешно создан!",
-								"Отправка", JOptionPane.WARNING_MESSAGE);
+				if (isCreated) {					
+					JOptionPane
+					.showMessageDialog(
+							null,
+							"Блок успешно создан!",
+							"Отправка", JOptionPane.WARNING_MESSAGE);
+				} else {
+					JOptionPane
+					.showMessageDialog(
+							null,
+							"Блок не создан! Некорректная транзакция!",
+							"Отправка", JOptionPane.WARNING_MESSAGE);
+					
+				}
 				dialog.dispose();
 			}
 		});

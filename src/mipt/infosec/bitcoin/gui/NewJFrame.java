@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,6 +33,8 @@ import javax.swing.Timer;
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
 import mipt.infosec.ejb.Transaction;
+import mipt.infosec.secutils.crypto.StringKeyPair;
+import mipt.logiclayer.Controller;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -155,7 +159,13 @@ public class NewJFrame extends JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/folder-pencil-icon-icon.png"))); // NOI18N
-        jMenuItem3.setText("Подписать сообщение...");
+        jMenuItem3.setText("Сгенерировать ключи");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+
         jMenu1.add(jMenuItem3);
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-info-icon.png"))); // NOI18N
@@ -300,6 +310,25 @@ public class NewJFrame extends JFrame {
     	frame.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {
+    	final JDialog dialog = new JDialog(this, true);
+    	try {
+    		StringKeyPair pair = Controller.generateKeys();			
+    		
+    		JOptionPane.showMessageDialog(
+					null,
+					"Ключи успешно сгенерированы!\nВаш закрытый ключ:" + pair.getPrivateKey(),
+					"Успех", JOptionPane.INFORMATION_MESSAGE);
+    		dialog.dispose();
+		} catch (NoSuchAlgorithmException | IOException e) {
+			JOptionPane
+			.showMessageDialog(
+					null,
+					"Произошла ошибка при генерации ключей! Попробуйте еще раз",
+					"Ошибка", JOptionPane.ERROR_MESSAGE);
+			dialog.dispose();
+		}
+    }
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
     	int result = JOptionPane.showConfirmDialog(
     			null,

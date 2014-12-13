@@ -41,7 +41,7 @@ public class Transaction {
 	private String signature = "";
 	private int id = 0;
 
-	public static void updateTransaction(String from, String to, double money, int id, String hash) {
+	public static void updateTransaction(String from, String to, double money, int id, String hash, String signature) {
 		File file = new File(FILE_NAME);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -62,15 +62,14 @@ public class Transaction {
 			trans.getElementsByTagName("to").item(0).setTextContent(to);
 			trans.getElementsByTagName("coin").item(0).setTextContent(Double.toString(money));
 			trans.getElementsByTagName("hash").item(0).setTextContent(hash);
+			trans.getElementsByTagName("signature").item(0).setTextContent(signature);
+			
 			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
 		}catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,8 +119,7 @@ public class Transaction {
 			sendTO.appendChild(document.createTextNode(to));
 			Element coin = document.createElement("coin");
 			coin.appendChild(document.createTextNode(Double.toString(money)));
-			Element sign = document.createElement("signature");
-			coin.appendChild(document.createTextNode(""));
+
 			byte[] id = BigInteger.valueOf(maxId + 1).toByteArray();
 			Stribog stb = new Stribog(256);
 			byte[] hash = stb.getHash(id);
@@ -129,11 +127,14 @@ public class Transaction {
 
 			Element hashs = document.createElement("hash");
 			hashs.appendChild(document.createTextNode(bhash.toString()));
+			Element sign = document.createElement("signature");
+			sign.appendChild(document.createTextNode(""));
+
 			node.appendChild(sendFrom);
 			node.appendChild(sendTO);
 			node.appendChild(coin);
-			node.appendChild(sign);
 			node.appendChild(hashs);
+			node.appendChild(sign);
 
 			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
@@ -180,10 +181,7 @@ public class Transaction {
 			} catch (TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-		
-		
+			}		
 		}catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,7 +199,7 @@ public class Transaction {
 		
 	}
 	
-	public static void createReceivedTransaction(int id, String from, String to, double money, String hash) {
+	public static void createReceivedTransaction(int id, String from, String to, double money, String hash, String signature) {
 		File f = new File(FILE_NAME);
 
 		if (!f.exists() || f.length() == 0) {
@@ -217,7 +215,7 @@ public class Transaction {
 		boolean not_max = false;
 		if (id <= Transaction.getMaxId()) {
 			if (Transaction.getTransaction(id) != null) {
-				Transaction.updateTransaction(from, to, money, id, hash);
+				Transaction.updateTransaction(from, to, money, id, hash, signature);
 				return;
 			}
 			not_max = true;
@@ -246,10 +244,15 @@ public class Transaction {
 
 			Element hashs = document.createElement("hash");
 			hashs.appendChild(document.createTextNode(hash));
+			
+			Element sign = document.createElement("signature");
+			sign.appendChild(document.createTextNode(signature));
+			
 			node.appendChild(sendFrom);
 			node.appendChild(sendTO);
 			node.appendChild(coin);
 			node.appendChild(hashs);
+			node.appendChild(sign);
 
 			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
@@ -504,6 +507,4 @@ public class Transaction {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
-	
-	
 }

@@ -11,13 +11,21 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
+import mipt.infosec.secutils.crypto.DigitalSignature;
 import mipt.logiclayer.Controller;
 
 /**
@@ -25,12 +33,14 @@ import mipt.logiclayer.Controller;
  * @author РґРЅСЃ
  */
 public class SendFrame extends JFrame {
+	private static final String UTF_8 = "UTF-8";
 	public static Toolkit kit = Toolkit.getDefaultToolkit();
 	public static Dimension screenSize = kit.getScreenSize();
 	public static int screenWidth = (int) (screenSize.width);
 	public static int screenHeight = (int) (screenSize.height);
 	private String sendname;
 	private double summ;
+	private String privateKey;
 
 	/**
 	 * Creates new form SendFrame
@@ -60,6 +70,8 @@ public class SendFrame extends JFrame {
 		jLabel1.setText("Получатель:");
 
 		jLabel2.setText("Количество монет:");
+		
+		jLabel3.setText("Закрытый ключ");
 
 		jButton1.setText("Отмена");
 
@@ -110,7 +122,9 @@ public class SendFrame extends JFrame {
 																				.addComponent(
 																						jTextField2)
 																				.addComponent(
-																						jTextField1))))
+																						jTextField1)
+																				.addComponent(
+																						jTextField3))))
 								.addContainerGap()));
 		layout.setVerticalGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,6 +158,18 @@ public class SendFrame extends JFrame {
 								.addPreferredGap(
 										javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 										171, Short.MAX_VALUE)
+							    .addGroup(
+										layout.createParallelGroup(
+												javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabel3)
+												.addComponent(
+														jTextField3,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+										171, Short.MAX_VALUE)
 								.addGroup(
 										layout.createParallelGroup(
 												javax.swing.GroupLayout.Alignment.BASELINE)
@@ -155,11 +181,14 @@ public class SendFrame extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				sendname = jTextField1.getText();
 				summ = Double.parseDouble(jTextField2.getText());
+				privateKey = jTextField3.getText();
 				try {
+					PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKey.getBytes(UTF_8));
+					KeyFactory kf = KeyFactory.getInstance("RSA");
 					Controller.createTransaction(
-							Receiver.MY_ADDR, sendname, summ);
+							Receiver.MY_ADDR, sendname, summ, kf.generatePrivate(spec));
 					Wallet.getInstance().reduceSumm(summ);
-				} catch (IOException e) {
+				} catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -181,10 +210,12 @@ public class SendFrame extends JFrame {
 		pack();
 	}// </editor-fold>
 
-	private javax.swing.JButton jButton1;
-	private javax.swing.JButton jButton2;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JTextField jTextField1;
-	private javax.swing.JTextField jTextField2;
+	private JButton jButton1;
+	private JButton jButton2;
+	private JLabel jLabel1;
+	private JLabel jLabel2;
+	private JLabel jLabel3;
+	private JTextField jTextField1;
+	private JTextField jTextField2;
+	private JTextField jTextField3;
 }

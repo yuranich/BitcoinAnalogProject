@@ -65,11 +65,11 @@ public class Receiver {
 				break;
 			case Protocol.NEW_TRANSACTION: 
 				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), 
-						message.getTo(), message.getMoney(), message.getTransactionHash());
+						message.getTo(), message.getMoney(), message.getTransactionHash(), message.getSignature());
 				break;
 			case Protocol.SUCCESSFUL_TRANSACTION:
 				Transaction.updateTransaction(message.getFrom(), message.getTo(), 
-						message.getMoney(), message.getTransactionId(), message.getTransactionHash());
+						message.getMoney(), message.getTransactionId(), message.getTransactionHash(), message.getSignature());
 				
 				if (MY_ADDR.equals(message.getTo())) {
 					Controller.addToWallet(message.getMoney());
@@ -77,10 +77,10 @@ public class Receiver {
 				
 				if (Transaction.getEmissionTransaction() == null) {
 					Transaction.createReceivedTransaction(message.getEmissionTransId(), message.getEmissionFrom(), 
-							message.getEmissionTo(), message.getEmissMoney(), message.getEmissionHash());
+							message.getEmissionTo(), message.getEmissMoney(), message.getEmissionHash(), message.getEmissionSignature());
 				} else {					
 					Transaction.updateTransaction(message.getEmissionFrom(), message.getEmissionTo(), 
-							message.getEmissMoney(), message.getEmissionTransId(), message.getEmissionHash());
+							message.getEmissMoney(), message.getEmissionTransId(), message.getEmissionHash(), message.getEmissionSignature());
 				}
 				
 				Block recv = new Block();
