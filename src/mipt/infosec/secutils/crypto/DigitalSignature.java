@@ -1,6 +1,7 @@
 package mipt.infosec.secutils.crypto;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 
 public class DigitalSignature {
 
-	private static final String CHARSETNAME = "UTF8";
+	private static final String CHARSETNAME = "UTF-8";
 	
 	private static final String RSA = "RSA";
 	private static final String RSA_SIGNING_ALGORITHM = "MD5WithRSA";
@@ -23,12 +24,12 @@ public class DigitalSignature {
 	 * This method returns a pair of strings.
 	 * These two strings are public and private keys.
 	 */
-	public static StringKeyPair getKeyPair() throws NoSuchAlgorithmException {
+	public static StringKeyPair getKeyPair() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		StringKeyPair pair = new StringKeyPair();
 		
 		KeyPair keyPair = generateKeyPair();
-		pair.setPrivateKey(keyPair.getPrivate().getEncoded().toString());
-		pair.setPublicKey(keyPair.getPublic().getEncoded().toString());
+		pair.setPrivateKey(new String(keyPair.getPrivate().getEncoded(), CHARSETNAME));
+		pair.setPublicKey(new String(keyPair.getPublic().getEncoded(), CHARSETNAME));
 		
 		return pair;
 	}

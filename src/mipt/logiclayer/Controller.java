@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -25,7 +26,7 @@ import mipt.infosec.secutils.hash.Stribog;
 public class Controller {
 
 	private static final String UTF_8 = "UTF-8";
-	private static final String KEYS_FILE = "Keys.properties";
+	public static final String KEYS_FILE = "Keys.properties";
 	
 	//This method is used for creating and sending broadcast about new transaction created
 	public static Boolean createTransaction(String from, String to, double money, PrivateKey pr) throws IOException {
@@ -55,7 +56,7 @@ public class Controller {
 				break;
 			}
 			i++;
-			if (i > 1000000) {
+			if (i > 100000) {
 				System.out.println("You not gonna make it!!!");
 				break;
 			}
@@ -80,10 +81,16 @@ public class Controller {
 	public static StringKeyPair generateKeys() throws NoSuchAlgorithmException, IOException {
 
 		StringKeyPair pair = DigitalSignature.getKeyPair();
-		FileWriter out = new FileWriter(KEYS_FILE, true);
-		out.append(Receiver.MY_ADDR + "=" + pair.getPublicKey() + "\n");
-		out.close();
-		//TODO make notifications
+		Properties prop = new Properties();
+		prop.load(new FileInputStream(KEYS_FILE));
+		if (prop.containsKey(Receiver.MY_ADDR)) {
+			prop.remove(Receiver.MY_ADDR);
+		}
+		prop.put(Receiver.MY_ADDR, pair.getPublicKey());
+		prop.list(new PrintStream(KEYS_FILE));
+		
+		Notifier notifier = new Notifier();
+		notifier.sendPublicKey(pair.getPublicKey());
 		return pair;
 	}
 	

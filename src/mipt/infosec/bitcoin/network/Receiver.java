@@ -1,5 +1,7 @@
 package mipt.infosec.bitcoin.network;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Inet4Address;
@@ -9,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Properties;
 
 import mipt.infosec.ejb.Block;
 import mipt.infosec.ejb.Transaction;
@@ -59,9 +62,10 @@ public class Receiver {
         return null; 
 	}
 	
-	public void updateDBInfo(MessageInstance message) {
+	public static void updateDBInfo(MessageInstance message) {
 		switch (message.getType()) {
-			case Protocol.NEW_NODE: //TODO: some actions.
+			case Protocol.NEW_PUBLIC_KEY:
+				updatePublicKeys(message.getKeyAddress(), message.getKeyValue());
 				break;
 			case Protocol.NEW_TRANSACTION: 
 				Transaction.createReceivedTransaction(message.getTransactionId(), message.getFrom(), 
@@ -92,5 +96,21 @@ public class Receiver {
 		}
 		
 		message.dumpContent();
+	}
+	
+	public static void updatePublicKeys(String addr, String key) {
+		try {
+			Properties prop = new Properties();
+			prop.load(new FileInputStream(Controller.KEYS_FILE));
+			
+			if (prop.containsKey(addr)) {
+				prop.remove(addr);
+			}
+			prop.put(addr, key);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

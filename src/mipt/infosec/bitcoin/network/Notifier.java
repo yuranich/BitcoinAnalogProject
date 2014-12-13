@@ -56,8 +56,10 @@ public class Notifier {
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 	
-	public void sendNewNodeInfo() throws IOException {
-		message.setType(Protocol.NEW_NODE);
+	public void sendPublicKey(String key) throws IOException {
+		message.setType(Protocol.NEW_PUBLIC_KEY);
+		message.setKeyAddress(Receiver.MY_ADDR);
+		message.setKeyValue(key);
 		NetworkUtils.sendNotificationToAll(addresses, message.formMessage());
 	}
 }

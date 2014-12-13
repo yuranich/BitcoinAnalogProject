@@ -175,7 +175,9 @@ public class Transaction {
 					trans = node;
 				}
 			}
-			trans.getElementsByTagName("signature").item(0).setTextContent(DigitalSignature.generateRSASignature(Integer.toBinaryString(transacId), privateKey).toString());
+			trans.getElementsByTagName("signature").item(0).setTextContent(
+					new String(DigitalSignature.generateRSASignature(
+							Integer.toBinaryString(transacId), privateKey).sign()));
 			try (PrintStream out = new PrintStream(new FileOutputStream(FILE_NAME))) {
 				out.print(XmlUtils.toXML(document));
 			} catch (TransformerException e) {

@@ -21,7 +21,25 @@ public class MessageInstance {
 	private String emissionHash;
 	private String signature;
 	private String emissionSignature;
+	private String keyAddress;
+	private String keyValue;
 	
+	public String getKeyAddress() {
+		return keyAddress;
+	}
+
+	public void setKeyAddress(String keyAddress) {
+		this.keyAddress = keyAddress;
+	}
+
+	public String getKeyValue() {
+		return keyValue;
+	}
+
+	public void setKeyValue(String keyValue) {
+		this.keyValue = keyValue;
+	}
+
 	public String getEmissionFrom() {
 		return emissionFrom;
 	}
@@ -164,8 +182,9 @@ public class MessageInstance {
 	public void parseMessage(List<String> message) {
 		type = Integer.parseInt(message.get(0));
 		switch (type) {
-			case Protocol.NEW_NODE:
-				//TODO: some actions
+			case Protocol.NEW_PUBLIC_KEY:
+				keyAddress = message.get(1);
+				keyValue   = message.get(2);
 				break;
 			case Protocol.NEW_TRANSACTION:
 				from = message.get(1);
@@ -200,8 +219,9 @@ public class MessageInstance {
 		List<String> newMessage = new ArrayList<>();
 		newMessage.add(Integer.toString(type));
 		switch(type) {
-			case Protocol.NEW_NODE:
-				//TODO: write some actions
+			case Protocol.NEW_PUBLIC_KEY:
+				newMessage.add(keyAddress);
+				newMessage.add(keyValue);
 				break;
 			case Protocol.NEW_TRANSACTION:
 				newMessage.add(from);
@@ -249,6 +269,8 @@ public class MessageInstance {
 					   + "\n               emission money: " + emissMoney
 					   + "\n               emission id: " + emissionTransId
 					   + "\n               emission hash: " + emissionHash
-					   + "\n               emission signature: " + emissionSignature);
+					   + "\n               emission signature: " + emissionSignature
+					   + "\n               key address: " + keyAddress
+					   + "\n               key value: " + keyValue);
 	}
 }

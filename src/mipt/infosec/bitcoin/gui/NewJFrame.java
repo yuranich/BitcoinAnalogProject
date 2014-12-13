@@ -9,7 +9,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
+
+import org.apache.commons.io.IOUtils;
 
 import mipt.infosec.bitcoin.network.Receiver;
 import mipt.infosec.bitcoin.wallet.Wallet;
@@ -314,10 +318,10 @@ public class NewJFrame extends JFrame {
     	final JDialog dialog = new JDialog(this, true);
     	try {
     		StringKeyPair pair = Controller.generateKeys();			
-    		
+    		IOUtils.write(pair.getPrivateKey(), new DataOutputStream(new FileOutputStream("user_key.txt")));
     		JOptionPane.showMessageDialog(
 					null,
-					"Ключи успешно сгенерированы!\nВаш закрытый ключ:" + pair.getPrivateKey(),
+					"Ключи успешно сгенерированы!\nВаш закрытый ключ находиться здесь: " + "user_key.txt",
 					"Успех", JOptionPane.INFORMATION_MESSAGE);
     		dialog.dispose();
 		} catch (NoSuchAlgorithmException | IOException e) {
