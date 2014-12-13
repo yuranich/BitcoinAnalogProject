@@ -172,10 +172,6 @@ public class NewJFrame extends JFrame {
 
         jMenu1.add(jMenuItem3);
 
-        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-info-icon.png"))); // NOI18N
-        jMenuItem4.setText("Проверить сообщение...");
-        jMenu1.add(jMenuItem4);
-        jMenu1.add(jSeparator1);
 
         jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-email-icon.png"))); // NOI18N
 //////////////////////////////////
@@ -214,29 +210,36 @@ public class NewJFrame extends JFrame {
 
         jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-padlock-icon.png"))); // NOI18N
         jMenuItem8.setText("Зашифровать бумажник...");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messActionPerformed(evt);
+            }
+        });        
         jMenu2.add(jMenuItem8);
+        
 
         jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-wand-icon.png"))); // NOI18N
         jMenuItem9.setText("Изменить пароль...");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messActionPerformed(evt);
+            }
+        });        
         jMenu2.add(jMenuItem9);
         jMenu2.add(jSeparator3);
 
         jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/drill-arrow-icon-icon.png"))); // NOI18N
         jMenuItem10.setText("Опции");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messActionPerformed(evt);
+            }
+        });          
         jMenu2.add(jMenuItem10);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Помощь");
-
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/application-minus-icon-icon.png"))); // NOI18N
-        jMenuItem11.setText("Окно отладки");
-        jMenu3.add(jMenuItem11);
-
-        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-info-icon.png"))); // NOI18N
-        jMenuItem12.setText("Опции командной строки");
-        jMenu3.add(jMenuItem12);
-        jMenu3.add(jSeparator4);
 
         jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mipt/infosec/bitcoin/gui/icons/icon-favourites-icon.png"))); // NOI18N
         jMenuItem13.setText("О программе");
@@ -345,6 +348,14 @@ public class NewJFrame extends JFrame {
     				System.out.println(screenWidth + "       " + screenHeight);
 
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+    private void messActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+	    	JOptionPane
+			.showMessageDialog(
+					null,
+					"Доступно в платной версии приложения",
+					"Отправка", JOptionPane.WARNING_MESSAGE);	    	
+
+    }
 //////////////////////////////////////////////////////////
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
     	SendFrame frame = new SendFrame();
